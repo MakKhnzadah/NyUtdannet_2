@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nyUtdannet2", "nyUtdannet2\nyUtdannet2.csproj", "{667A92AC-C694-4E8C-A7C0-FFE8252EAB52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{667A92AC-C694-4E8C-A7C0-FFE8252EAB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{667A92AC-C694-4E8C-A7C0-FFE8252EAB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{667A92AC-C694-4E8C-A7C0-FFE8252EAB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{667A92AC-C694-4E8C-A7C0-FFE8252EAB52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
