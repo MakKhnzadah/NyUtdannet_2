@@ -62,14 +62,16 @@ namespace nyUtdannet2.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
             var viewModel = new JobListingDetailsViewModel
             {
                 JobListing = listing,
-                HasApplied = user != null && await _context.JobApps
-                    .AnyAsync(a => a.JobListingId == id && a.UserId == user.Id),
-                IsFavorite = user != null && await _context.Favorites
-                    .AnyAsync(f => f.JobListingId == id && f.UserId == user.Id)
+                HasApplied = await _context.JobApps
+                    .AnyAsync(a => a.JobListingId == id && a.UserId == userId),
+                IsFavorite = await _context.Favorites
+                    .AnyAsync(f => f.JobListingId == id && f.UserId == userId)
             };
 
             return View(viewModel);
@@ -80,10 +82,15 @@ namespace nyUtdannet2.Controllers
         {
             return View(new JobListing
             {
+                Title = string.Empty,
+                Headline = string.Empty,
+                Description = string.Empty,
+                Requirements = string.Empty,
                 Deadline = DateTime.UtcNow.AddDays(30),
                 LocationType = "On-site",
                 EmploymentType = "Full-time",
-                Country = "Norway"
+                Country = "Norway",
+                EmployerUserId = string.Empty
             });
         }
 
@@ -100,6 +107,8 @@ namespace nyUtdannet2.Controllers
             try
             {
                 var user = await _userManager.GetUserAsync(User);
+                if (user == null) return Unauthorized();
+
                 model.EmployerUserId = user.Id;
                 model.IsActive = true;
                 model.CreatedDate = DateTime.UtcNow;
@@ -240,7 +249,8 @@ namespace nyUtdannet2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleFavorite(int jobListingId)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
+            
             var existingFavorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.JobListingId == jobListingId && f.UserId == userId);
 
@@ -266,7 +276,8 @@ namespace nyUtdannet2.Controllers
         [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Favorites()
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
+            
             var favorites = await _context.Favorites
                 .Where(f => f.UserId == userId)
                 .Include(f => f.JobListing)
@@ -281,7 +292,8 @@ namespace nyUtdannet2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveFavorite(int id)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
+            
             var favorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
 
@@ -298,7 +310,7 @@ namespace nyUtdannet2.Controllers
 
     public class JobListingDetailsViewModel
     {
-        public JobListing JobListing { get; set; }
+        public required JobListing JobListing { get; set; }
         public bool HasApplied { get; set; }
         public bool IsFavorite { get; set; }
     }

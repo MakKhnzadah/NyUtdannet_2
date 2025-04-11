@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using nyUtdannet2.Models;
+using nyUtdannet2.Data;
 using System.Security.Claims;
 
 namespace nyUtdannet2.Controllers
@@ -65,6 +66,11 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> EmployerHome()
         {
             var employerId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(employerId))
+            {
+                return Unauthorized();
+            }
+
             var employerUser = await _context.EmployerUsers
                 .Include(e => e.JobListings)
                 .FirstOrDefaultAsync(e => e.Id == employerId);
@@ -80,7 +86,7 @@ namespace nyUtdannet2.Controllers
                 ActiveJobs = employerUser.JobListings.Count(j => j.IsActive),
                 NewApplications = await _context.JobApps
                     .Where(a => a.JobListing.EmployerUserId == employerId && 
-                               a.Status == ApplicationStatus.Submitted.ToString())
+                               a.Status == ApplicationStatus.Submitted)
                     .CountAsync(),
                 RecentApplications = await _context.JobApps
                     .Where(a => a.JobListing.EmployerUserId == employerId)
@@ -98,6 +104,11 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> EmployeeHome()
         {
             var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
             var user = await _context.ApplicationUsers
                 .Include(u => u.JobApplications)
                 .FirstOrDefaultAsync(u => u.Id == userId);
@@ -125,8 +136,11 @@ namespace nyUtdannet2.Controllers
 
         private async Task<List<JobListing>> GetRecommendedJobs(string userId)
         {
-            // Implement your recommendation logic here
-            // This could be based on skills, location, preferences etc.
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new List<JobListing>();
+            }
+
             return await _context.JobListings
                 .Where(j => j.IsActive && j.Deadline > DateTime.UtcNow)
                 .OrderByDescending(j => j.CreatedDate)
@@ -135,20 +149,19 @@ namespace nyUtdannet2.Controllers
         }
     }
 
-    // ViewModels for the dashboard views
     public class EmployerDashboardViewModel
     {
-        public string CompanyName { get; set; }
+        public required string CompanyName { get; set; }
         public int ActiveJobs { get; set; }
         public int NewApplications { get; set; }
-        public List<JobApp> RecentApplications { get; set; }
+        public required List<JobApp> RecentApplications { get; set; }
     }
 
     public class EmployeeDashboardViewModel
     {
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
         public int PendingApplications { get; set; }
-        public List<JobListing> RecentListings { get; set; }
-        public List<JobListing> RecommendedListings { get; set; }
+        public required List<JobListing> RecentListings { get; set; }
+        public required List<JobListing> RecommendedListings { get; set; }
     }
 }

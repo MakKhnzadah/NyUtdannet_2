@@ -8,14 +8,13 @@ namespace nyUtdannet2.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        // First Name and Last Name instead of Nickname
         [Required]
         [MaxLength(50)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         // Changed from PostalNumber to PostalCode
         [Required]
