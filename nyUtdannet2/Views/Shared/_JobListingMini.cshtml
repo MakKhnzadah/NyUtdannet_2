@@ -1,0 +1,70 @@
+﻿@model nyUtdannet2.Models.JobListing
+
+@{
+    ViewData["Title"] = "Job Listing Details";
+    Layout = null;
+}
+
+<div class="card mb-4 job-card">
+    <div class="card-header text-white bg-gradient">
+        <h3 class="card-title mb-0">@Model.Title</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Beskrivelse:</strong><br /> @Model.Description</p>
+        <p><strong>Krav:</strong><br /> @Model.Requirements</p>
+        <p><strong>Opprettet:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
+        <p><strong>Frist dato:</strong> @Model.Deadline.ToString("yyyy-MM-dd")</p>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <a asp-action="ViewJobListing" asp-route-jobListingId="@Model.Id" class="btn btn-luxury">Vis detaljer</a>
+        <a asp-action="AddToFavorites" asp-route-jobListingId="@Model.Id" class="btn btn-gold">Legg til favoritt</a>
+    </div>
+</div>
+
+<style>
+    .job-card {
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .job-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .bg-gradient {
+        background: linear-gradient(90deg, #1f1c2c, #928dab); /* Deep navy to smoky lavender */
+        padding: 1rem 1.25rem;
+    }
+
+    .btn-luxury {
+        background-color: #343a40; /* Dark slate gray */
+        color: #f8f9fa;
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-luxury:hover {
+        background-color: #212529;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-gold {
+        background-color: #c59d5f; /* Warm gold */
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-gold:hover {
+        background-color: #b58e50;
+        transform: scale(1.05);
+    }
+
+    .card-body p {
+        margin-bottom: 0.75rem;
+    }
+</style>

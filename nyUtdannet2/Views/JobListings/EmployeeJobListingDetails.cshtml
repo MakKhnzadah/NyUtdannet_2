@@ -1,18 +1,28 @@
-@model TModel
+@model nyUtdannet2.Models.JobListing
+
 
 @{
-    Layout = null;
+    ViewBag.Title = "Stilling Detaljer";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
+<div class="container my-5">
+    <!-- Overskrift -->
+    <h1 class="text-center mb-5 display-4">Stillingsdetaljer</h1>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title h4">@Model.Title</h2>
+            <hr />
+            <p><strong>Beskrivelse:</strong><br /> @Model.Description</p>
+            <p><strong>Krav:</strong><br /> @Model.Requirements</p>
+            <p><strong>Opprettet:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>Frist:</strong> @Model.Deadline.ToString("yyyy-MM-dd")</p>
+        </div>
+        <div class="card-footer bg-white text-end">
+            <form asp-action="Apply" asp-route-jobListingId="@Model.Id" method="post">
+                <button type="submit" class="btn btn-primary">Søk nå</button>
+            </form>
+        </div>
+    </div>
 </div>
-</body>
-</html>
