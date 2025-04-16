@@ -6,32 +6,23 @@ using nyUtdannet2.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Konfigurer tjenester
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// Legg til Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
-// Konfigurer Identity
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
-    {
-        options.SignIn.RequireConfirmedAccount = false;
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-// Legg til MVC og Razor Pages
+// Legg til andre tjenester, som controllers
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Konfigurer HTTP pipeline
+// Konfigurer HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -41,15 +32,14 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseAuthentication();
+app.UseAuthentication(); // Legg til autentisering
 app.UseAuthorization();
 
-// Map både MVC og Razor Pages
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
 
 app.Run();
