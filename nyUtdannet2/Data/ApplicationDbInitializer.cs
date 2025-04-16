@@ -1,13 +1,11 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using nyUtdannet2.Models;
 
 namespace nyUtdannet2.Data;
 
-
 public static class ApplicationDbInitializer
 {
-    public static async void Initialize(ApplicationDbContext db, UserManager<ApplicationUser> um, RoleManager<IdentityRole> rm)
+    public static async Task Initialize(ApplicationDbContext db, UserManager<ApplicationUser> um, RoleManager<IdentityRole> rm)
     {
         // Optional: Reset DB only in development
         // db.Database.EnsureDeleted();  
@@ -109,62 +107,69 @@ public static class ApplicationDbInitializer
         var employer1 = await um.FindByEmailAsync("employer1@example.com") as EmployerUser;
         var employer2 = await um.FindByEmailAsync("employer2@example.com") as EmployerUser;
 
-        var job1 = new JobListing
+        if (employer1 != null && employer2 != null)
         {
-            Headline = "Bli med på vårt team som programvareingeniør!",
-            Title = "Programvareingeniør",
-            Description = "Utvikle banebrytende programvareløsninger for ulike industrier.",
-            Requirements = "Sterke programmeringsferdigheter, erfaring med .NET Core og kunnskap om skybaserte systemer.",
-            EmployerUserId = employer1?.Id,
-            EmployerUser = employer1,
-            Deadline = DateTime.Now.AddDays(30)
-        };
+            var job1 = new JobListing
+            {
+                Headline = "Bli med på vårt team som programvareingeniør!",
+                Title = "Programvareingeniør",
+                Description = "Utvikle banebrytende programvareløsninger for ulike industrier.",
+                Requirements = "Sterke programmeringsferdigheter, erfaring med .NET Core og kunnskap om skybaserte systemer.",
+                EmployerUserId = employer1.Id,
+                EmployerUser = employer1,
+                Deadline = DateTime.Now.AddDays(30)
+            };
 
-        var job2 = new JobListing
-        {
-            Headline = "Spennende mulighet som prosjektleder",
-            Title = "Prosjektleder",
-            Description = "Led team på tvers av funksjoner og sørg for prosjektets suksess.",
-            Requirements = "Dokumentert erfaring som prosjektleder, fremragende kommunikasjonsevner.",
-            EmployerUserId = employer2?.Id,
-            EmployerUser = employer2,
-            Deadline = DateTime.Now.AddDays(20)
-        };
+            var job2 = new JobListing
+            {
+                Headline = "Spennende mulighet som prosjektleder",
+                Title = "Prosjektleder",
+                Description = "Led team på tvers av funksjoner og sørg for prosjektets suksess.",
+                Requirements = "Dokumentert erfaring som prosjektleder, fremragende kommunikasjonsevner.",
+                EmployerUserId = employer2.Id,
+                EmployerUser = employer2,
+                Deadline = DateTime.Now.AddDays(20)
+            };
 
-        db.JobListings.AddRange(job1, job2);
-        await db.SaveChangesAsync();
+            db.JobListings.AddRange(job1, job2);
+            await db.SaveChangesAsync();
 
-        // --- Job Applications ---
-        var user1 = await um.FindByEmailAsync("normaluser1@example.com");
-        var user2 = await um.FindByEmailAsync("normaluser2@example.com");
+            // --- Job Applications ---
+            var user1 = await um.FindByEmailAsync("normaluser1@example.com");
+            var user2 = await um.FindByEmailAsync("normaluser2@example.com");
 
-        var app1 = new JobApp
-        {
-            Title = "Søknad om programvareingeniørstilling",
-            Summary = "Erfaren programvareutvikler klar til å bidra til innovative prosjekter.",
-            Content = "Jeg har over 5 års erfaring med .NET utvikling og skybaserte systemer.",
-            Status = ApplicationStatus.Pending,
-            UserId = user1?.Id,
-            User = user1,
-            JobListingId = job1.Id,
-            JobListing = job1
-        };
+            if (user1 != null && user2 != null)
+            {
+                var app1 = new JobApp
+                {
+                    Title = "Søknad om programvareingeniørstilling",
+                    Summary = "Erfaren programvareutvikler klar til å bidra til innovative prosjekter.",
+                    Content = "Jeg har over 5 års erfaring med .NET utvikling og skybaserte systemer.",
+                    Status = ApplicationStatus.Pending,
+                    UserId = user1.Id,
+                    User = user1,
+                    JobListingId = job1.Id,
+                    JobListing = job1
+                };
 
-        var app2 = new JobApp
-        {
-            Title = "Søknad om prosjektlederstilling",
-            Summary = "Erfaren prosjektleder klar til å lede teamet til suksess.",
-            Content = "Over 8 års erfaring med prosjektledelse på tvers av ulike industrier.",
-            Status = ApplicationStatus.Pending,
-            UserId = user2?.Id,
-            User = user2,
-            JobListingId = job2.Id,
-            JobListing = job2
-        };
+                var app2 = new JobApp
+                {
+                    Title = "Søknad om prosjektlederstilling",
+                    Summary = "Erfaren prosjektleder klar til å lede teamet til suksess.",
+                    Content = "Over 8 års erfaring med prosjektledelse på tvers av ulike industrier.",
+                    Status = ApplicationStatus.Pending,
+                    UserId = user2.Id,
+                    User = user2,
+                    JobListingId = job2.Id,
+                    JobListing = job2
+                };
 
-        db.JobApplications.AddRange(app1, app2);
-        await db.SaveChangesAsync();
+                db.JobApps.AddRange(app1, app2);  // Changed from db.JobApplications to db.JobApps
+                await db.SaveChangesAsync();
+            }
+        }
 
         Console.WriteLine("✅ Database initialized successfully.");
     }
 }
+

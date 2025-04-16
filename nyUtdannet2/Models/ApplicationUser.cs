@@ -19,7 +19,7 @@ namespace nyUtdannet2.Models
         // Changed from PostalNumber to PostalCode
         [Required]
         [RegularExpression(@"^\d{4}$", ErrorMessage = "Postal code must be a 4-digit code.")]
-        public string PostalCode { get; set; }
+        public string? PostalCode { get; set; }
 
         // Separate fields for address details
         [Required]
