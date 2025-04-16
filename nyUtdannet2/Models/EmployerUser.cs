@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 
 
+=======
+using Microsoft.AspNetCore.Identity;
+>>>>>>> b97a5f46dc1db21f9b389b5642d3226747ad5d2d
 using System;
 using System.ComponentModel.DataAnnotations;
 
