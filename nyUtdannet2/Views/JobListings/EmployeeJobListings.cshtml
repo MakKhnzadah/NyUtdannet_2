@@ -1,0 +1,26 @@
+﻿@model IEnumerable<nyUtdannet2.Models.JobListing>
+
+@{
+    ViewBag.Title = "Tilgjengelige Stillinger";
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <h2 class="mb-4">Tilgjengelige stillingsannonser</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var jobListing in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <partial name="_JobListingMini" model="jobListing" />
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Ingen stillingsannonser er tilgjengelige for øyeblikket.</p>
+    }
+</div>

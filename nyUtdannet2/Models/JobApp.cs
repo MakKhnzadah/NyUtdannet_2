@@ -1,3 +1,4 @@
+
 namespace nyUtdannet2.Models
 {
     using System;
@@ -32,5 +33,7 @@ namespace nyUtdannet2.Models
         Accepted,       // Offer accepted
         Rejected,       // Application rejected
         Withdrawn       // Candidate withdrew
+        ,
+        Pending
     }
 }

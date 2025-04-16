@@ -58,5 +58,6 @@ namespace nyUtdannet2.Models
         public DateTime DateOfBirth { get; set; }
     
         public ICollection<JobApp>? JobApplications { get; set; } = new List<JobApp>();
+        public string PostalNumber { get; set; }
     }
 }

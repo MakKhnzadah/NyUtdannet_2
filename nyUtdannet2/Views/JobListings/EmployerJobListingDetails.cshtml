@@ -1,0 +1,23 @@
+﻿@model nyUtdannet2.Models.JobListing
+
+@{
+    ViewBag.Title = "Jobbdetaljer";
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <h2 class="mb-4">@Model.Title</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <p><strong>Overskrift:</strong> @Model.Headline</p>
+            <p><strong>Beskrivelse:</strong><br />@Model.Description</p>
+            <p><strong>Frist:</strong> @Model.Deadline.ToString("yyyy-MM-dd")</p>
+        </div>
+        <div class="card-footer bg-white text-end">
+            <a href="@Url.Action("Edit", "JobListings", new { id = Model.Id })" class="btn btn-warning me-2">Rediger</a>
+            <a href="@Url.Action("Delete", "JobListings", new { id = Model.Id })" class="btn btn-danger me-2">Slett</a>
+            <a href="@Url.Action("Index", "JobListings")" class="btn btn-secondary">Tilbake til liste</a>
+        </div>
+    </div>
+</div>
