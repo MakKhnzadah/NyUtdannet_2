@@ -1,0 +1,99 @@
+@page
+@model nyUtdannet2.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Registrer";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+            <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="card p-4">
+                @Html.AntiForgeryToken()
+
+
+                <!-- E-post -->
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label">E-post</label>
+                    <input asp-for="Input.Email" class="form-control" placeholder="Skriv din e-postadresse" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <!-- Passord -->
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label">Passord</label>
+                    <input asp-for="Input.Password" class="form-control" placeholder="Minst 6 tegn" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <!-- Bekreft passord -->
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label">Bekreft passord</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Gjenta passordet" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <!-- Personlig informasjon -->
+                <div class="mb-3">
+                    <label asp-for="Input.FirstName" class="form-label">Fornavn</label>
+                    <input asp-for="Input.FirstName" class="form-control" placeholder="Ditt fornavn" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.LastName" class="form-label">Etternavn</label>
+                    <input asp-for="Input.LastName" class="form-control" placeholder="Ditt etternavn" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.DateOfBirth" class="form-label">Fødselsdato</label>
+                    <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
+                    <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                </div>
+
+                <!-- Adresse -->
+                <div class="mb-3">
+                    <label asp-for="Input.StreetName" class="form-label">Gateadresse</label>
+                    <input asp-for="Input.StreetName" class="form-control" placeholder="Din gateadresse" />
+                    <span asp-validation-for="Input.StreetName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.StreetNumber" class="form-label">Husnummer</label>
+                    <input asp-for="Input.StreetNumber" class="form-control" placeholder="Ditt husnummer" />
+                    <span asp-validation-for="Input.StreetNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.PostalCode" class="form-label">Postnummer</label>
+                    <input asp-for="Input.PostalCode" class="form-control" placeholder="Ditt postnummer" />
+                    <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.City" class="form-label">Poststed</label>
+                    <input asp-for="Input.City" class="form-control" placeholder="Ditt poststed" />
+                    <span asp-validation-for="Input.City" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">Registrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.querySelector('input[type="date"]');
+            if (dateInput) {
+                dateInput.placeholder = "Velg fødselsdato";
+            }
+        });
+    </script>
+}

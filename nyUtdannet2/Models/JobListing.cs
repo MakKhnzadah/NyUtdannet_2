@@ -38,6 +38,15 @@ namespace nyUtdannet2.Models
             CreatedDate = DateTime.UtcNow;
             UpdatedDate = DateTime.UtcNow;
         }
+        public class InputModel
+        {
+            [Required]
+            public string Email { get; set; }
+
+            [Required]
+            public string PostalCode { get; set; }
+        }
+
     }
 
 }

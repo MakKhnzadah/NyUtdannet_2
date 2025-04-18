@@ -7,6 +7,7 @@ using nyUtdannet2.Models;
 using nyUtdannet2.Data;
 using System.Security.Claims;
 
+
 namespace nyUtdannet2.Controllers
 {
     [Authorize]
@@ -110,7 +111,7 @@ namespace nyUtdannet2.Controllers
             }
 
             var user = await _context.ApplicationUsers
-                .Include(u => u.JobApplications)
+                .Include<ApplicationUser, object>(u => u.JobApplications)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -121,8 +122,8 @@ namespace nyUtdannet2.Controllers
             var viewModel = new EmployeeDashboardViewModel
             {
                 FullName = $"{user.FirstName} {user.LastName}",
-                PendingApplications = user.JobApplications.Count(a => 
-                    a.Status == ApplicationStatus.Submitted),
+                PendingApplications = user.JobApplications?.Count(a => 
+                    a.Status == ApplicationStatus.Submitted) ?? 0,
                 RecentListings = await _context.JobListings
                     .Where(j => j.IsActive && j.Deadline > DateTime.UtcNow)
                     .OrderByDescending(j => j.CreatedDate)

@@ -33,7 +33,7 @@ public static class ApplicationDbInitializer
                 Email = "normaluser1@example.com",
                 FirstName = "Jonas",
                 LastName = "Olsen",
-                PostalNumber = "12345",
+                PostalCode = "12345",
                 StreetName = "Hovedgata",
                 StreetNumber = "1A",
                 City = "Oslo",
@@ -47,7 +47,7 @@ public static class ApplicationDbInitializer
                 Email = "normaluser2@example.com",
                 FirstName = "Anna",
                 LastName = "Hansen",
-                PostalNumber = "54321",
+                PostalCode = "54321",
                 StreetName = "Andregata",
                 StreetNumber = "2B",
                 City = "Bergen",
@@ -61,7 +61,7 @@ public static class ApplicationDbInitializer
                 Email = "employer1@example.com",
                 FirstName = "Alice",
                 LastName = "Johansen",
-                PostalNumber = "98765",
+                PostalCode = "98765",
                 StreetName = "Tredjeavenue",
                 StreetNumber = "3C",
                 City = "Stavanger",
@@ -78,7 +78,7 @@ public static class ApplicationDbInitializer
                 Email = "employer2@example.com",
                 FirstName = "Bob",
                 LastName = "Brun",
-                PostalNumber = "67890",
+                PostalCode = "67890",
                 StreetName = "Fjerdeblvd",
                 StreetNumber = "4D",
                 City = "Trondheim",
@@ -164,7 +164,7 @@ public static class ApplicationDbInitializer
                     JobListing = job2
                 };
 
-                db.JobApps.AddRange(app1, app2);  // Changed from db.JobApplications to db.JobApps
+                db.JobApps.AddRange(app1, app2);
                 await db.SaveChangesAsync();
             }
         }

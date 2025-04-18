@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using nyUtdannet2.Data;
 
@@ -10,9 +11,11 @@ using nyUtdannet2.Data;
 namespace nyUtdannet2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418104925_MakePostalCodeNullable")]
+    partial class MakePostalCodeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -229,6 +232,10 @@ namespace nyUtdannet2.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PostalNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
@@ -297,6 +304,9 @@ namespace nyUtdannet2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -335,6 +345,8 @@ namespace nyUtdannet2.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("JobListingId");
 
@@ -512,6 +524,10 @@ namespace nyUtdannet2.Data.Migrations
 
             modelBuilder.Entity("nyUtdannet2.Models.JobApp", b =>
                 {
+                    b.HasOne("nyUtdannet2.Models.ApplicationUser", null)
+                        .WithMany("JobApplications")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("nyUtdannet2.Models.JobListing", "JobListing")
                         .WithMany()
                         .HasForeignKey("JobListingId")
@@ -523,7 +539,7 @@ namespace nyUtdannet2.Data.Migrations
                         .HasForeignKey("JobListingId1");
 
                     b.HasOne("nyUtdannet2.Models.ApplicationUser", "User")
-                        .WithMany("JobApplications")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
