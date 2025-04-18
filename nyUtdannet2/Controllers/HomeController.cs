@@ -7,6 +7,7 @@ using nyUtdannet2.Models;
 using nyUtdannet2.Data;
 using System.Security.Claims;
 
+
 namespace nyUtdannet2.Controllers
 {
     [Authorize]
@@ -25,7 +26,30 @@ namespace nyUtdannet2.Controllers
             _userManager = userManager;
             _context = context;
         }
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
 
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Correct role check using UserManager
+            if (await _userManager.IsInRoleAsync(user, "Employer"))
+            {
+                return RedirectToAction("EmployerHome");
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Employee"))
+            {
+                return RedirectToAction("EmployeeHome");
+            }
+
+            // If no known role is assigned
+            return RedirectToAction("AssignRole", "Account");
+        }
+
+        /*
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -47,6 +71,7 @@ namespace nyUtdannet2.Controllers
             // If no role is assigned (shouldn't happen in normal flow)
             return RedirectToAction("AssignRole", "Account");
         }
+        */
 
         public IActionResult Privacy()
         {
@@ -110,7 +135,7 @@ namespace nyUtdannet2.Controllers
             }
 
             var user = await _context.ApplicationUsers
-                .Include(u => u.JobApplications)
+                .Include<ApplicationUser, object>(u => u.JobApplications)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -121,8 +146,8 @@ namespace nyUtdannet2.Controllers
             var viewModel = new EmployeeDashboardViewModel
             {
                 FullName = $"{user.FirstName} {user.LastName}",
-                PendingApplications = user.JobApplications.Count(a => 
-                    a.Status == ApplicationStatus.Submitted),
+                PendingApplications = user.JobApplications?.Count(a => 
+                    a.Status == ApplicationStatus.Submitted) ?? 0,
                 RecentListings = await _context.JobListings
                     .Where(j => j.IsActive && j.Deadline > DateTime.UtcNow)
                     .OrderByDescending(j => j.CreatedDate)

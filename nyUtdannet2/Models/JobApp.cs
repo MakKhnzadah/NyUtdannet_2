@@ -22,6 +22,7 @@ namespace nyUtdannet2.Models
         public virtual ApplicationUser User { get; set; } = null!;
         public required int JobListingId { get; set; }
         public virtual JobListing JobListing { get; set; } = null!;
+        
     }
 
     public enum ApplicationStatus

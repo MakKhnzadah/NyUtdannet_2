@@ -7,13 +7,9 @@ public static class ApplicationDbInitializer
 {
     public static async Task Initialize(ApplicationDbContext db, UserManager<ApplicationUser> um, RoleManager<IdentityRole> rm)
     {
-        // Optional: Reset DB only in development
-        // db.Database.EnsureDeleted();  
-        db.Database.EnsureCreated();
-
         Console.WriteLine("🔄 Initializing database...");
 
-        // --- Roles ---
+        // --- إنشاء الأدوار ---
         string[] roleNames = { "Employee", "Employer" };
         foreach (var roleName in roleNames)
         {
@@ -24,7 +20,7 @@ public static class ApplicationDbInitializer
             }
         }
 
-        // --- Users ---
+        // --- إنشاء المستخدمين ---
         var users = new List<(ApplicationUser user, string password, string role)>
         {
             (new ApplicationUser
@@ -33,7 +29,7 @@ public static class ApplicationDbInitializer
                 Email = "normaluser1@example.com",
                 FirstName = "Jonas",
                 LastName = "Olsen",
-                PostalNumber = "12345",
+                PostalCode = "12345",
                 StreetName = "Hovedgata",
                 StreetNumber = "1A",
                 City = "Oslo",
@@ -47,7 +43,7 @@ public static class ApplicationDbInitializer
                 Email = "normaluser2@example.com",
                 FirstName = "Anna",
                 LastName = "Hansen",
-                PostalNumber = "54321",
+                PostalCode = "54321",
                 StreetName = "Andregata",
                 StreetNumber = "2B",
                 City = "Bergen",
@@ -61,7 +57,7 @@ public static class ApplicationDbInitializer
                 Email = "employer1@example.com",
                 FirstName = "Alice",
                 LastName = "Johansen",
-                PostalNumber = "98765",
+                PostalCode = "98765",
                 StreetName = "Tredjeavenue",
                 StreetNumber = "3C",
                 City = "Stavanger",
@@ -78,7 +74,7 @@ public static class ApplicationDbInitializer
                 Email = "employer2@example.com",
                 FirstName = "Bob",
                 LastName = "Brun",
-                PostalNumber = "67890",
+                PostalCode = "67890",
                 StreetName = "Fjerdeblvd",
                 StreetNumber = "4D",
                 City = "Trondheim",
@@ -103,11 +99,11 @@ public static class ApplicationDbInitializer
             }
         }
 
-        // --- Job Listings ---
+        // --- عروض العمل ---
         var employer1 = await um.FindByEmailAsync("employer1@example.com") as EmployerUser;
         var employer2 = await um.FindByEmailAsync("employer2@example.com") as EmployerUser;
 
-        if (employer1 != null && employer2 != null)
+        if (employer1 != null && employer2 != null && !db.JobListings.Any())
         {
             var job1 = new JobListing
             {
@@ -134,11 +130,11 @@ public static class ApplicationDbInitializer
             db.JobListings.AddRange(job1, job2);
             await db.SaveChangesAsync();
 
-            // --- Job Applications ---
+            // --- طلبات التوظيف ---
             var user1 = await um.FindByEmailAsync("normaluser1@example.com");
             var user2 = await um.FindByEmailAsync("normaluser2@example.com");
 
-            if (user1 != null && user2 != null)
+            if (user1 != null && user2 != null && !db.JobApps.Any())
             {
                 var app1 = new JobApp
                 {
@@ -147,9 +143,7 @@ public static class ApplicationDbInitializer
                     Content = "Jeg har over 5 års erfaring med .NET utvikling og skybaserte systemer.",
                     Status = ApplicationStatus.Pending,
                     UserId = user1.Id,
-                    User = user1,
-                    JobListingId = job1.Id,
-                    JobListing = job1
+                    JobListingId = job1.Id
                 };
 
                 var app2 = new JobApp
@@ -159,12 +153,10 @@ public static class ApplicationDbInitializer
                     Content = "Over 8 års erfaring med prosjektledelse på tvers av ulike industrier.",
                     Status = ApplicationStatus.Pending,
                     UserId = user2.Id,
-                    User = user2,
-                    JobListingId = job2.Id,
-                    JobListing = job2
+                    JobListingId = job2.Id
                 };
 
-                db.JobApps.AddRange(app1, app2);  // Changed from db.JobApplications to db.JobApps
+                db.JobApps.AddRange(app1, app2);
                 await db.SaveChangesAsync();
             }
         }
@@ -172,4 +164,3 @@ public static class ApplicationDbInitializer
         Console.WriteLine("✅ Database initialized successfully.");
     }
 }
-

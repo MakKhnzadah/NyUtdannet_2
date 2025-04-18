@@ -1,0 +1,31 @@
+@page
+@model LockoutModel
+@{
+    ViewData["Title"] = "Kontoen er låst";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <h1 class="mb-3">@ViewData["Title"]</h1>
+                <p class="mb-4">Denne kontoen har blitt låst. Vennligst prøv igjen senere.</p>
+                <div class="d-grid">
+                    <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Index">Tilbake til forsiden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public class LockoutModel : PageModel
+    {
+        public void OnGet()
+        {
+        }
+    }
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.RazorPages

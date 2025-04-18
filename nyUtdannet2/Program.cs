@@ -11,14 +11,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // --- Configuration: Database ---
+        // --- Configuration: Connection String ---
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        
+
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
 
-        // --- Configuration: Identity & Roles ---
+        // --- Identity Configuration ---
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -28,7 +28,7 @@ public class Program
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        // --- MVC and Razor Pages ---
+        // --- MVC & Razor ---
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -39,14 +39,29 @@ public class Program
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<ApplicationDbContext>();
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            try
+            {
+                var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            ApplicationDbInitializer.Initialize(dbContext, userManager, roleManager);
+                Console.WriteLine("🔄 Running migrations...");
+                await dbContext.Database.MigrateAsync();  // ✅ استخدم Migrations فقط
+
+                // Seed initial data
+                await ApplicationDbInitializer.Initialize(dbContext, userManager, roleManager);
+
+                Console.WriteLine("✅ Database initialized successfully");
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred while initializing the database.");
+                Console.WriteLine("❌ Error initializing database: " + ex.Message);
+            }
         }
 
-        // --- Middleware Pipeline ---
+        // --- Middleware ---
         if (app.Environment.IsDevelopment())
         {
             app.UseMigrationsEndPoint();
@@ -59,16 +74,14 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-
         app.UseRouting();
-
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-        
+
         app.MapRazorPages();
 
         app.Run();

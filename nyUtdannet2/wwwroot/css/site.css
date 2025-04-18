@@ -1,80 +1,86 @@
-html {
-    font-size: 14px;
-    scroll-behavior: smooth;
-    background-color: #fff;
-    color: #1e1e1e;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-/* Focus Effects */
-.btn:focus,
-.btn:active:focus,
-.btn-link.nav-link:focus,
-.form-control:focus,
-.form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem #f472b6, 0 0 0 0.25rem #fb7185; /* soft pink + coral */
-}
-
-/* Body and Layout Adjustments */
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #fdf2f8, #fff); /* soft blush base */
-    color: #1f2937; /* slate-800 */
+    background: linear-gradient(to right, #fcd8d4, #c4e5f8);
+    color: #1a1a1a;
+    direction: rtl;
 }
 
-/* Placeholder Styling */
-.form-floating > .form-control-plaintext::placeholder,
-.form-floating > .form-control::placeholder {
-    color: #c084fc; /* violet-400 */
-    text-align: end;
-    font-style: italic;
-    transition: text-align 0.3s ease, color 0.3s ease;
-}
-
-.form-floating > .form-control-plaintext:focus::placeholder,
-.form-floating > .form-control:focus::placeholder {
-    text-align: start;
-    color: #f472b6; /* pink-400 */
-}
-
-/* Button Styling */
-.btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 8px;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    font-size: 1.2rem;
     font-weight: 600;
-    transition: all 0.3s ease-in-out;
 }
 
-.btn-primary {
-    background: linear-gradient(to right, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-    color: #fff;
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 25px;
+    height: 25px;
+    background-color: #007a8c;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    color: #0c1e4a;
+    font-weight: bold;
+}
+
+.nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #0c1e4a;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.input {
+    padding: 15px 20px;
     border: none;
+    border-radius: 30px;
+    width: 250px;
+    font-size: 1rem;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(to right, #bc1888, #cc2366, #dc2743, #e6683c, #f09433);
-    transform: scale(1.05);
+.btn {
+    padding: 15px 30px;
+    background-color: #007a8c;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
-/* Responsive Enhancements */
-@media (max-width: 600px) {
-    html {
-        font-size: 15px;
-    }
+.btn:hover {
+    background-color: #005f6b;
+}
 
-    .btn {
-        width: 100%;
-    }
+.filters {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    font-size: 0.95rem;
 }

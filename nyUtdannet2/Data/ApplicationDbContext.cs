@@ -1,4 +1,5 @@
-﻿namespace nyUtdannet2.Data
+﻿// ApplicationDbContext.cs
+namespace nyUtdannet2.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,12 @@
             builder.Entity<Favorite>()
                 .HasIndex(f => new { f.UserId, f.JobListingId })
                 .IsUnique();
+            
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.JobApplications)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId);
+            
         }
     }
 }

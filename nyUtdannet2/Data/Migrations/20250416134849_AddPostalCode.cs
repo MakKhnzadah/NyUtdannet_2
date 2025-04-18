@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace nyUtdannet2.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class AddPostalCode : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -93,7 +91,6 @@ namespace nyUtdannet2.Data.Migrations
                 onDelete: ReferentialAction.Restrict);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -141,7 +138,7 @@ namespace nyUtdannet2.Data.Migrations
                 table: "Favorites",
                 type: "TEXT",
                 nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                defaultValue: new DateTime(1, 1, 1));
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_UserId",
