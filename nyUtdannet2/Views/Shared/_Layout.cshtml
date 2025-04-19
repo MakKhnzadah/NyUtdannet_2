@@ -17,6 +17,8 @@
     <!-- Site-specific styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/Project.styles.css" asp-append-version="true"/>
+    
+
 
     @RenderSection("Styles", required: false)
 </head>
@@ -41,9 +43,7 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="JobApplications" asp-action="Index">Jobbsøknader</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="JobListings" asp-action="ViewFavorites">Favoritter</a>
-                    </li>
+                   
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>

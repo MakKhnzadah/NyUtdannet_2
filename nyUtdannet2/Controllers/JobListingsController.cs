@@ -1,3 +1,5 @@
+// JobListingsController.cs
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +39,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("Employer/Index", listings);
+                return View("EmployerJobListings", listings); // Updated view name
             }
             else
             {
@@ -47,7 +49,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("Employee/Index", activeListings);
+                return View("EmployeeJobListings", activeListings); // Updated view name
             }
         }
 
@@ -250,7 +252,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> ToggleFavorite(int jobListingId)
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-            
+
             var existingFavorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.JobListingId == jobListingId && f.UserId == userId);
 
@@ -277,7 +279,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> Favorites()
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-            
+
             var favorites = await _context.Favorites
                 .Where(f => f.UserId == userId)
                 .Include(f => f.JobListing)
@@ -293,7 +295,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> RemoveFavorite(int id)
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-            
+
             var favorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
 

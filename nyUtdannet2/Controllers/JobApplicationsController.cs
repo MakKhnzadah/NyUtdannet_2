@@ -1,3 +1,5 @@
+// JobApplicationsController.cs
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +30,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            if (user == null) return Unauthorized();
 
             if (await _userManager.IsInRoleAsync(user, "Employer"))
             {
@@ -42,19 +41,21 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(a => a.SubmittedDate)
                     .ToListAsync();
 
-                return View("Employer/Index", applications);
+                return View("EmployerIndex", applications);
             }
             else if (await _userManager.IsInRoleAsync(user, "Employee"))
             {
                 var applications = await _context.JobApps
                     .Where(a => a.UserId == user.Id)
                     .Include(a => a.JobListing)
-                        .ThenInclude(j => j.EmployerUser)
+                    .ThenInclude(j => j.EmployerUser)
                     .OrderByDescending(a => a.SubmittedDate)
                     .ToListAsync();
 
-                return View("Employee/Index", applications);
+                return View("EmployeeJobApplications", applications); 
             }
+
+
 
             return Forbid();
         }
@@ -65,16 +66,10 @@ namespace nyUtdannet2.Controllers
             var jobListing = await _context.JobListings
                 .FirstOrDefaultAsync(j => j.Id == id && j.IsActive && j.Deadline > DateTime.UtcNow);
 
-            if (jobListing == null)
-            {
-                return NotFound();
-            }
+            if (jobListing == null) return NotFound();
 
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var hasApplied = await _context.JobApps
                 .AnyAsync(a => a.JobListingId == id && a.UserId == userId);
@@ -88,9 +83,9 @@ namespace nyUtdannet2.Controllers
             var jobApp = new JobApp
             {
                 Title = $"Application for {jobListing.Title}",
-                Summary = string.Empty, // Initialiser med tom streng
-                Content = string.Empty, // Initialiser med tom streng
-                JobListingId = id, // Bruk parameteren 'id' direkte
+                Summary = string.Empty,
+                Content = string.Empty,
+                JobListingId = id,
                 UserId = userId,
                 Status = ApplicationStatus.Submitted
             };
@@ -103,10 +98,7 @@ namespace nyUtdannet2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Apply(JobApp model)
         {
-            if (model == null || !ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (model == null || !ModelState.IsValid) return View(model);
 
             try
             {
@@ -134,20 +126,14 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var application = await _context.JobApps
                 .Include(a => a.User)
                 .Include(a => a.JobListing)
                 .FirstOrDefaultAsync(a => a.Id == id && a.JobListing.EmployerUserId == userId);
 
-            if (application == null)
-            {
-                return NotFound();
-            }
+            if (application == null) return NotFound();
 
             return View(application);
         }
@@ -158,19 +144,13 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> UpdateStatus(int id, ApplicationStatus status)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var application = await _context.JobApps
                 .Include(a => a.JobListing)
                 .FirstOrDefaultAsync(a => a.Id == id && a.JobListing.EmployerUserId == userId);
 
-            if (application == null)
-            {
-                return NotFound();
-            }
+            if (application == null) return NotFound();
 
             application.Status = status;
             application.UpdatedDate = DateTime.UtcNow;
@@ -195,18 +175,12 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> Withdraw(int id)
         {
             var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            if (userId == null) return Unauthorized();
 
             var application = await _context.JobApps
                 .FirstOrDefaultAsync(a => a.Id == id && a.UserId == userId);
 
-            if (application == null)
-            {
-                return NotFound();
-            }
+            if (application == null) return NotFound();
 
             if (application.Status != ApplicationStatus.Submitted)
             {

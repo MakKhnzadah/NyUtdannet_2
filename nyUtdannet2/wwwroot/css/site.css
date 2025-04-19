@@ -84,3 +84,14 @@ body, html {
     gap: 20px;
     font-size: 0.95rem;
 }
+.btn-teal {
+    background-color: #007c91;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    transition: 0.3s ease;
+}
+.btn-teal:hover {
+    background-color: #005f6b;
+    color: white;
+}

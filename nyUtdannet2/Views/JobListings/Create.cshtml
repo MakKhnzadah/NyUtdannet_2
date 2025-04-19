@@ -1,109 +1,98 @@
 @model nyUtdannet2.Models.JobListing
 
 @{
-    ViewData["Title"] = "Create Job Listing";
+    ViewData["Title"] = "Opprett stillingsannonse";
     Layout = "_Layout";
 }
 
-<h2>Create Job Listing</h2>
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(to right, #fbd3e9, #bbdff7);">
+    <div class="card shadow p-4 w-75">
+        <h2 class="text-center mb-4">Opprett stillingsannonse</h2>
 
-<form asp-controller="JobListings" asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Title" class="control-label">Job Title</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+        <form asp-controller="JobListings" asp-action="Create" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="Title">Jobbtittel</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Headline" class="control-label">Headline</label>
-        <input asp-for="Headline" class="form-control" />
-        <span asp-validation-for="Headline" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Headline">Overskrift</label>
+                <input asp-for="Headline" class="form-control" />
+                <span asp-validation-for="Headline" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Description" class="control-label">Job Description</label>
-        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Description">Stillingsbeskrivelse</label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Requirements" class="control-label">Requirements</label>
-        <textarea asp-for="Requirements" class="form-control" rows="5"></textarea>
-        <span asp-validation-for="Requirements" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Requirements">Krav</label>
+                <textarea asp-for="Requirements" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Requirements" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Benefits" class="control-label">Benefits (Optional)</label>
-        <textarea asp-for="Benefits" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="Benefits" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Benefits">Fordeler (valgfritt)</label>
+                <textarea asp-for="Benefits" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Benefits" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="LocationType" class="control-label">Location Type</label>
-        <select asp-for="LocationType" class="form-control">
-            <option value="On-site">On-site</option>
-            <option value="Remote">Remote</option>
-            <option value="Hybrid">Hybrid</option>
-        </select>
-        <span asp-validation-for="LocationType" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="LocationType">Arbeidssted</label>
+                <select asp-for="LocationType" class="form-control">
+                    <option value="On-site">På kontor</option>
+                    <option value="Remote">Fjernarbeid</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+                <span asp-validation-for="LocationType" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="City" class="control-label">City (Optional)</label>
-        <input asp-for="City" class="form-control" />
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="City">By (valgfritt)</label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="SalaryRange" class="control-label">Salary Range (Optional)</label>
-        <input asp-for="SalaryRange" class="form-control" />
-        <span asp-validation-for="SalaryRange" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="SalaryRange">Lønn (valgfritt)</label>
+                <input asp-for="SalaryRange" class="form-control" />
+                <span asp-validation-for="SalaryRange" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="EmploymentType" class="control-label">Employment Type</label>
-        <select asp-for="EmploymentType" class="form-control">
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-            <option value="Contract">Contract</option>
-            <option value="Internship">Internship</option>
-        </select>
-        <span asp-validation-for="EmploymentType" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="EmploymentType">Ansettelsestype</label>
+                <select asp-for="EmploymentType" class="form-control">
+                    <option value="Full-time">Fulltid</option>
+                    <option value="Part-time">Deltid</option>
+                    <option value="Contract">Kontrakt</option>
+                    <option value="Internship">Internship</option>
+                </select>
+                <span asp-validation-for="EmploymentType" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Deadline" class="control-label">Application Deadline</label>
-        <input asp-for="Deadline" type="datetime-local" class="form-control" />
-        <span asp-validation-for="Deadline" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Deadline">Søknadsfrist</label>
+                <input asp-for="Deadline" type="datetime-local" class="form-control" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
 
-    <div class="form-group form-check">
-        <input asp-for="IsActive" class="form-check-input" checked />
-        <label asp-for="IsActive" class="form-check-label">Active Listing</label>
-        <span asp-validation-for="IsActive" class="text-danger"></span>
-    </div>
+            <div class="form-check mb-3">
+                <input asp-for="IsActive" class="form-check-input" checked />
+                <label asp-for="IsActive" class="form-check-label">Aktiv stilling</label>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
 
-    <div class="form-group mt-4">
-        <button type="submit" class="btn btn-primary">Create Listing</button>
-        <a href="@Url.Action("Index", "JobListings")" class="btn btn-secondary">Cancel</a>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Opprett</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Avbryt</a>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }
-
-<style>
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
-    }
-
-    textarea.form-control {
-        min-height: 120px;
-    }
-</style>

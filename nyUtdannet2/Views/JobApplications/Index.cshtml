@@ -1,8 +1,26 @@
-@model dynamic
+@model IEnumerable<nyUtdannet2.Models.JobApp>
 
-@{
-    ViewBag.Title = "Error if you land here";
-    Layout = "_Layout";
-}
-
-<h2>Error if you land here</h2>
+<h2>Alle søknader</h2>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Tittel</th>
+        <th>Søker</th>
+        <th>Stilling</th>
+        <th>Status</th>
+        <th>Innsendt</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var app in Model)
+    {
+        <tr>
+            <td>@app.Title</td>
+            <td>@app.User?.Email</td>
+            <td>@app.JobListing?.Title</td>
+            <td>@app.Status</td>
+            <td>@app.SubmittedDate.ToString("dd.MM.yyyy")</td>
+        </tr>
+    }
+    </tbody>
+</table>

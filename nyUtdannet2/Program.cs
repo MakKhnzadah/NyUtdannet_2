@@ -46,7 +46,7 @@ public class Program
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 Console.WriteLine("🔄 Running migrations...");
-                await dbContext.Database.MigrateAsync();  // ✅ استخدم Migrations فقط
+                await dbContext.Database.MigrateAsync();  //  use only Migrations 
 
                 // Seed initial data
                 await ApplicationDbInitializer.Initialize(dbContext, userManager, roleManager);
