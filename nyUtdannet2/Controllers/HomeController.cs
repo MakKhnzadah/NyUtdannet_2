@@ -32,7 +32,7 @@ namespace nyUtdannet2.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Login", "Account"); // dette mangler sikkert hos deg
+                return RedirectToAction("Login", "Account"); 
             }
 
             if (await _userManager.IsInRoleAsync(user, "Employer"))

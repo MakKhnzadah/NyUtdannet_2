@@ -37,7 +37,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("Employer/Index", listings);
+                return View("EmployerJobListings", listings);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("Employee/Index", activeListings);
+                return View("EmployeeJobListings", activeListings);
             }
         }
 

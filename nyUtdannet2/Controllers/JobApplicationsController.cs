@@ -42,7 +42,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(a => a.SubmittedDate)
                     .ToListAsync();
 
-                return View("Employer/Index", applications);
+                return View("EmployerJobApplications", applications);
             }
             else if (await _userManager.IsInRoleAsync(user, "Employee"))
             {
@@ -53,7 +53,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(a => a.SubmittedDate)
                     .ToListAsync();
 
-                return View("Employee/Index", applications);
+                return View("EmployeeJobApplications", applications);
             }
 
             return Forbid();

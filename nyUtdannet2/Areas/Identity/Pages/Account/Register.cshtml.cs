@@ -144,6 +144,7 @@ namespace nyUtdannet2.Areas.Identity.Pages.Account
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     //return LocalRedirect(returnUrl);
                     
+                    await _userManager.AddToRoleAsync(user, Input.UserType);
                     TempData["RegistrationSuccess"] = "Registrering vellykket! Vennligst logg inn.";
                     return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
                 }

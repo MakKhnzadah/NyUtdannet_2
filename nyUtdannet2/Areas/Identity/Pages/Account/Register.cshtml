@@ -2,123 +2,136 @@
 @model nyUtdannet2.Areas.Identity.Pages.Account.RegisterModel
 @{
     ViewData["Title"] = "Registrer";
-    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+
 }
+<div class="register-container">
+    <h1 class="register-header">@ViewData["Title"]</h1>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form">
+        @Html.AntiForgeryToken()
 
-            <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="card p-4">
-                @Html.AntiForgeryToken()
+        <div class="row">
+            <!-- Kolonne 1 -->
+            <div class="col-md-6">
+                <!-- Kontoinformasjon -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Kontoinformasjon</h3>
 
-                <!-- Brukertype -->
-                <div class="mb-3">
-                    <label asp-for="Input.UserType" class="form-label">Brukertype</label>
-                    <select asp-for="Input.UserType" class="form-select" id="userTypeSelect">
-                        <option value="Employee">Ansatt</option>
-                        <option value="Employer">Arbeidsgiver</option>
-                    </select>
-                    <span asp-validation-for="Input.UserType" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="Input.UserType" class="form-label">Brukertype</label>
+                        <select asp-for="Input.UserType" class="form-select" id="userTypeSelect">
+                            <option value="Employee">Student</option>
+                            <option value="Employer">Arbeidsgiver</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">E-post</label>
+                        <input asp-for="Input.Email" class="form-control" placeholder="name@example.com" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">Passord</label>
+                        <input asp-for="Input.Password" class="form-control" placeholder="Minst 6 tegn" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.ConfirmPassword" class="form-label">Bekreft passord</label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Gjenta passordet" />
+                    </div>
                 </div>
+            </div>
 
-                <!-- E-post -->
-                <div class="mb-3">
-                    <label asp-for="Input.Email" class="form-label">E-post</label>
-                    <input asp-for="Input.Email" class="form-control" placeholder="Skriv din e-postadresse" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-
-                <!-- Passord -->
-                <div class="mb-3">
-                    <label asp-for="Input.Password" class="form-label">Passord</label>
-                    <input asp-for="Input.Password" class="form-control" placeholder="Minst 6 tegn" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-
-                <!-- Bekreft passord -->
-                <div class="mb-3">
-                    <label asp-for="Input.ConfirmPassword" class="form-label">Bekreft passord</label>
-                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Gjenta passordet" />
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-
+            <!-- Kolonne 2 -->
+            <div class="col-md-6">
                 <!-- Personlig informasjon -->
-                <div class="mb-3">
-                    <label asp-for="Input.FirstName" class="form-label">Fornavn</label>
-                    <input asp-for="Input.FirstName" class="form-control" placeholder="Ditt fornavn" />
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                </div>
+                <div class="form-section">
+                    <h3 class="form-section-title">Personlig informasjon</h3>
 
-                <div class="mb-3">
-                    <label asp-for="Input.LastName" class="form-label">Etternavn</label>
-                    <input asp-for="Input.LastName" class="form-control" placeholder="Ditt etternavn" />
-                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Input.DateOfBirth" class="form-label">Fødselsdato</label>
-                    <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
-                    <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
-                </div>
-
-                <!-- Adresse -->
-                <div class="mb-3">
-                    <label asp-for="Input.StreetName" class="form-label">Gateadresse</label>
-                    <input asp-for="Input.StreetName" class="form-control" placeholder="Din gateadresse" />
-                    <span asp-validation-for="Input.StreetName" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Input.StreetNumber" class="form-label">Husnummer</label>
-                    <input asp-for="Input.StreetNumber" class="form-control" placeholder="Ditt husnummer" />
-                    <span asp-validation-for="Input.StreetNumber" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Input.PostalCode" class="form-label">Postnummer</label>
-                    <input asp-for="Input.PostalCode" class="form-control" placeholder="Ditt postnummer" />
-                    <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Input.City" class="form-label">Poststed</label>
-                    <input asp-for="Input.City" class="form-control" placeholder="Ditt poststed" />
-                    <span asp-validation-for="Input.City" class="text-danger"></span>
-                </div>
-
-                <!-- Firma-informasjon for arbeidsgivere -->
-                <div id="employerFields" style="display:none;">
                     <div class="mb-3">
-                        <label asp-for="Input.CompanyName" class="form-label">Firmanavn</label>
-                        <input asp-for="Input.CompanyName" class="form-control" placeholder="Firmanavn" />
-                        <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+                        <label asp-for="Input.FirstName" class="form-label">Fornavn</label>
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="Ditt fornavn" />
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Input.CompanyDescription" class="form-label">Beskrivelse av firma</label>
-                        <textarea asp-for="Input.CompanyDescription" class="form-control" rows="3"></textarea>
-                        <span asp-validation-for="Input.CompanyDescription" class="text-danger"></span>
+                        <label asp-for="Input.LastName" class="form-label">Etternavn</label>
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Ditt etternavn" />
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Input.CompanyWebsite" class="form-label">Nettside</label>
-                        <input asp-for="Input.CompanyWebsite" class="form-control" placeholder="https://firma.no" />
-                        <span asp-validation-for="Input.CompanyWebsite" class="text-danger"></span>
+                        <label asp-for="Input.DateOfBirth" class="form-label">Fødselsdato</label>
+                        <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary w-100 mt-3">Registrer</button>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <!-- Adresseinformasjon (full bredde) -->
+        <div class="form-section">
+            <h3 class="form-section-title">Adresseinformasjon</h3>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Input.StreetName" class="form-label">Gateadresse</label>
+                        <input asp-for="Input.StreetName" class="form-control" placeholder="Din gateadresse" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Input.StreetNumber" class="form-label">Husnummer</label>
+                        <input asp-for="Input.StreetNumber" class="form-control" placeholder="Ditt husnummer" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Input.PostalCode" class="form-label">Postnummer</label>
+                        <input asp-for="Input.PostalCode" class="form-control" placeholder="Ditt postnummer" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Input.City" class="form-label">Poststed</label>
+                        <input asp-for="Input.City" class="form-control" placeholder="Ditt poststed" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firma-informasjon for arbeidsgivere -->
+        <div id="employerFields" class="form-section" style="display:none; grid-column: 1 / -1;">
+            <h3 class="form-section-title">Firmainformasjon</h3>
+            <div class="mb-3">
+                <label asp-for="Input.CompanyName" class="form-label">Firmanavn</label>
+                <input asp-for="Input.CompanyName" class="form-control" placeholder="Firmanavn" />
+                <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.CompanyDescription" class="form-label">Beskrivelse av firma</label>
+                <textarea asp-for="Input.CompanyDescription" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Input.CompanyDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.CompanyWebsite" class="form-label">Nettside</label>
+                <input asp-for="Input.CompanyWebsite" class="form-control" placeholder="https://firma.no" />
+                <span asp-validation-for="Input.CompanyWebsite" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-4">Registrer</button>
+    </form>
 </div>
 
-@section Scripts 
-{
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
     <script>
         function toggleEmployerFields() {
             const userType = document.getElementById("userTypeSelect").value;
@@ -126,9 +139,7 @@
             employerFields.style.display = (userType === "Employer") ? "block" : "none";
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            toggleEmployerFields(); // On load
-            document.getElementById("userTypeSelect").addEventListener("change", toggleEmployerFields);
-        });
+        document.addEventListener('DOMContentLoaded', toggleEmployerFields);
+        document.getElementById("userTypeSelect").addEventListener("change", toggleEmployerFields);
     </script>
 }
