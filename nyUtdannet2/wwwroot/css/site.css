@@ -5,41 +5,66 @@ body, html {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(to right, #fcd8d4, #c4e5f8);
     color: #1a1a1a;
-    direction: rtl;
+    direction: ltr;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    font-size: 1.2rem;
-    font-weight: 600;
+    padding: 20px 50px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 999;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-}
-
-.logo-icon {
-    width: 25px;
-    height: 25px;
-    background-color: #007a8c;
-    border-radius: 50%;
-    margin-left: 10px;
-}
-
-.logo-text {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 800;
     color: #0c1e4a;
-    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+    margin-left: 40px;
 }
 
 .nav a {
-    margin-left: 20px;
     text-decoration: none;
-    color: #0c1e4a;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #007a8c;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.logout-btn {
+    background-color: #007a8c;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #005e6a;
 }
 
 .search-section {

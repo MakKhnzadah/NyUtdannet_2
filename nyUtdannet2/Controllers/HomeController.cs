@@ -32,31 +32,7 @@ namespace nyUtdannet2.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Correct role check using UserManager
-            if (await _userManager.IsInRoleAsync(user, "Employer"))
-            {
-                return RedirectToAction("EmployerHome");
-            }
-            else if (await _userManager.IsInRoleAsync(user, "Employee"))
-            {
-                return RedirectToAction("EmployeeHome");
-            }
-
-            // If no known role is assigned
-            return RedirectToAction("AssignRole", "Account");
-        }
-
-        /*
-        public async Task<IActionResult> Index()
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account"); // dette mangler sikkert hos deg
             }
 
             if (await _userManager.IsInRoleAsync(user, "Employer"))
@@ -68,11 +44,12 @@ namespace nyUtdannet2.Controllers
                 return RedirectToAction("EmployeeHome");
             }
 
-            // If no role is assigned (shouldn't happen in normal flow)
-            return RedirectToAction("AssignRole", "Account");
+            return View("Index"); 
         }
-        */
 
+
+
+        
         public IActionResult Privacy()
         {
             return View();

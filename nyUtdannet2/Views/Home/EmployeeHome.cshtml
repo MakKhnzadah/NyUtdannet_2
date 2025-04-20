@@ -1,7 +1,10 @@
+@model nyUtdannet2.Controllers.EmployerDashboardViewModel
+
 @{
     ViewData["Title"] = "Arbeidsgiver Dashboard";
     Layout = "_Layout";
 }
+
 
 <div class="container employer-dashboard">
     <!-- Hero Seksjon -->
@@ -35,7 +38,7 @@
                         <i class="fas fa-briefcase fa-2x"></i>
                     </div>
                     <h3 class="h5 fw-bold">Aktive stillinger</h3>
-                    <p class="display-6 fw-bold text-primary">@ViewBag.ActiveJobs</p>
+                    <p class="display-6 fw-bold text-primary">@Model.ActiveJobs</p>
                     <a asp-controller="JobListing" asp-action="Index" class="small">Se alle</a>
                 </div>
             </div>
@@ -48,7 +51,7 @@
                         <i class="fas fa-file-alt fa-2x"></i>
                     </div>
                     <h3 class="h5 fw-bold">Nye søknader</h3>
-                    <p class="display-6 fw-bold text-success">@ViewBag.NewApplications</p>
+                    <p class="display-6 fw-bold text-success">@Model.NewApplications</p>
                     <a asp-controller="JobApp" asp-action="EmployerApplications" class="small">Se alle</a>
                 </div>
             </div>
@@ -61,7 +64,7 @@
                         <i class="fas fa-eye fa-2x"></i>
                     </div>
                     <h3 class="h5 fw-bold">Sidevisninger</h3>
-                    <p class="display-6 fw-bold text-info">@ViewBag.PageViews</p>
+                    <p class="display-6 fw-bold text-info">@Model.RecentApplications</p>
                     <a asp-controller="Analytics" asp-action="Index" class="small">Se detaljer</a>
                 </div>
             </div>

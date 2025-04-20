@@ -1,4 +1,3 @@
-// Areas/Identity/Pages/Account/Register.cshtml.cs
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -140,10 +139,13 @@ namespace nyUtdannet2.Areas.Identity.Pages.Account
                     if (!await _roleManager.RoleExistsAsync(Input.UserType))
                         await _roleManager.CreateAsync(new IdentityRole(Input.UserType));
 
-                    await _userManager.AddToRoleAsync(user, Input.UserType);
+                    //await _userManager.AddToRoleAsync(user, Input.UserType);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    //return LocalRedirect(returnUrl);
+                    
+                    TempData["RegistrationSuccess"] = "Registrering vellykket! Vennligst logg inn.";
+                    return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
                 }
 
                 foreach (var error in result.Errors)
