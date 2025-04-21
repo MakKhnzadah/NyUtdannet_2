@@ -46,6 +46,22 @@ namespace nyUtdannet2.Controllers
 
             return View("Index"); 
         }
+        
+        
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            // Den henter pålogget bruker
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Returner ApplicationUser-modellen til viewet
+            return View(user);
+        }
+
 
 
 

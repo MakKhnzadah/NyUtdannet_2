@@ -3,6 +3,7 @@
 }
 
     <main class="search-section">
+<<<<<<< HEAD
         <form class="search-box" asp-controller="JobListings" asp-action="Search" method="get">
             <input type="text" name="query" placeholder="Job title, skill or company" class="input" />
             <input type="text" name="location" placeholder="Town, city or postcode" class="input" />
@@ -13,7 +14,22 @@
             <label><input type="checkbox" name="employmentType" value="Full-time" /> Permanent</label>
             <label><input type="checkbox" name="employmentType" value="Temporary" /> Temporary</label>
             <label><input type="checkbox" name="employmentType" value="Part-time" /> Part Time</label>
+=======
+        <form class="search-box">
+            <input type="text" placeholder="Stillingstittel, ferdigheter eller selskap" class="input" />
+            <input type="text" placeholder="By, sted eller postnummer" class="input" />
+            <button type="submit" class="btn">SØk</button>
+        </form>
+
+        <div class="filters">
+            <label><input type="checkbox" /> Fast stilling</label>
+            <label><input type="checkbox" /> Midlertidig</label>
+            <label><input type="checkbox" /> Deltid</label>
+>>>>>>> 5ea3b66fe3f67d0444dcb0a584211d40501ca7b3
         </div>
     </main>
 
+@section Head {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
 
