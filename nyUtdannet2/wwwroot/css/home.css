@@ -1,0 +1,89 @@
+/* home.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --font-base: 'Inter', sans-serif;
+    --font-size-body: 16px;
+    --bg-page: #f5f7fa;
+    --card-bg: #ffffff;
+    --primary: #147A8C;
+    --primary-light: #E0F7FA;
+    --text-dark: #1A1A1A;
+    --text-muted: #555555;
+    --border-radius: 1rem;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --transition: 0.3s ease;
+}
+
+body {
+    background: linear-gradient(135deg, #fbd3e9 0%, #bbf1fa 100%);
+    font-family: var(--font-base);
+    margin: 0;
+    padding: 0;
+}
+
+/* Search Section */
+.search-section {
+    max-width: 800px;
+    margin: 3rem auto;
+    background-color: var(--card-bg);
+    padding: 2.5rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 24px var(--shadow);
+}
+
+.search-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-box .input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: var(--primary-light);
+    font-size: var(--font-size-body);
+    color: var(--text-dark);
+    transition: box-shadow var(--transition);
+}
+.search-box .input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(20, 122, 140, 0.3);
+}
+
+.search-box .btn {
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-body);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--transition), transform var(--transition);
+}
+.search-box .btn:hover {
+    background-color: #432158;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+.filters label {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+.filters input[type="checkbox"] {
+    margin-right: 0.5rem;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
