@@ -11,3 +11,4 @@ nyUtdannet2/nyUtdannet2.db-wal
 nyUtdannet2/nyUtdannet2.db
 nyUtdannet2/nyUtdannet2.db-shm
 nyUtdannet2/nyUtdannet2.db-wal
+nyUtdannet2/*.db*
