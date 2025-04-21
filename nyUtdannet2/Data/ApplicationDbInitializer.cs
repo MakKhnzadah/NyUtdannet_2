@@ -9,7 +9,7 @@ public static class ApplicationDbInitializer
     {
         Console.WriteLine("🔄 Initializing database...");
 
-        // --- إنشاء الأدوار ---
+        
         string[] roleNames = { "Employee", "Employer" };
         foreach (var roleName in roleNames)
         {
@@ -20,7 +20,7 @@ public static class ApplicationDbInitializer
             }
         }
 
-        // --- إنشاء المستخدمين ---
+        
         var users = new List<(ApplicationUser user, string password, string role)>
         {
             (new ApplicationUser
@@ -99,7 +99,7 @@ public static class ApplicationDbInitializer
             }
         }
 
-        // --- عروض العمل ---
+        
         var employer1 = await um.FindByEmailAsync("employer1@example.com") as EmployerUser;
         var employer2 = await um.FindByEmailAsync("employer2@example.com") as EmployerUser;
 

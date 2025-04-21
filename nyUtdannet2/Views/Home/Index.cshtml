@@ -1,33 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Hjem - Ny utdannet";
 }
 
-    <main class="search-section">
-<<<<<<< HEAD
+<div class="home-container">
+    <!-- Hero section with image -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Finn din første jobb etter utdanning</h1>
+            <p>For nyutdannede og arbeidsgivere som søker frisk kompetanse</p>
+            <div class="hero-cta">
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Registrer deg nå</a>
+                <a asp-controller="JobListings" asp-action="Index" class="btn btn-outline-primary">Se alle stillinger</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="~/images/job-seekers.jpg" alt="Jobbkandidater venter på intervju" class="img-fluid" />
+        </div>
+    </div>
+
+    <!-- Search section -->
+    <div class="search-section">
+        <h2>Søk etter jobber</h2>
         <form class="search-box" asp-controller="JobListings" asp-action="Search" method="get">
-            <input type="text" name="query" placeholder="Job title, skill or company" class="input" />
-            <input type="text" name="location" placeholder="Town, city or postcode" class="input" />
+            <input type="text" name="query" placeholder="Stillingstittel, ferdigheter eller selskap" class="input" />
+            <input type="text" name="location" placeholder="By, sted eller postnummer" class="input" />
             <button type="submit" class="btn">Søk</button>
         </form>
 
         <div class="filters">
-            <label><input type="checkbox" name="employmentType" value="Full-time" /> Permanent</label>
-            <label><input type="checkbox" name="employmentType" value="Temporary" /> Temporary</label>
-            <label><input type="checkbox" name="employmentType" value="Part-time" /> Part Time</label>
-=======
-        <form class="search-box">
-            <input type="text" placeholder="Stillingstittel, ferdigheter eller selskap" class="input" />
-            <input type="text" placeholder="By, sted eller postnummer" class="input" />
-            <button type="submit" class="btn">SØk</button>
-        </form>
-
-        <div class="filters">
-            <label><input type="checkbox" /> Fast stilling</label>
-            <label><input type="checkbox" /> Midlertidig</label>
-            <label><input type="checkbox" /> Deltid</label>
->>>>>>> 5ea3b66fe3f67d0444dcb0a584211d40501ca7b3
+            <label><input type="checkbox" name="employmentType" value="Full-time" /> Fast stilling</label>
+            <label><input type="checkbox" name="employmentType" value="Temporary" /> Midlertidig</label>
+            <label><input type="checkbox" name="employmentType" value="Part-time" /> Deltid</label>
         </div>
-    </main>
+    </div>
+
+    <!-- Featured jobs section -->
+    <div class="featured-jobs">
+        <h2>Utvalgte stillinger</h2>
+        <div class="jobs-grid">
+            <!-- This will be populated dynamically with job listings -->
+            <p class="text-center w-100">Logg inn for å se nye stillinger tilpasset din profil</p>
+        </div>
+    </div>
+
+    <!-- About section -->
+    <div class="about-section">
+        <h2>Om Ny utdannet</h2>
+        <p>Ny utdannet kobler nyutdannede jobbsøkere med arbeidsgivere som søker frisk kompetanse. Vår plattform er spesielt designet for å støtte overgangen fra utdanning til arbeidslivet.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="bi bi-search"></i>
+                <h3>Finn relevante jobber</h3>
+                <p>Søk etter stillinger som passer dine kvalifikasjoner og interesser</p>
+            </div>
+            <div class="feature-card">
+                <i class="bi bi-file-earmark-text"></i>
+                <h3>Enkel søknadsprosess</h3>
+                <p>Last opp CV og søknad med få klikk</p>
+            </div>
+            <div class="feature-card">
+                <i class="bi bi-briefcase"></i>
+                <h3>For arbeidsgivere</h3>
+                <p>Finn talentfulle nyutdannede til din bedrift</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Head {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
