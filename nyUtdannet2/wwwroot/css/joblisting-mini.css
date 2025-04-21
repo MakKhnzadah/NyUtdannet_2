@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Colors */
+    --bg-page: #f7f7fa;
+    --card-bg: #ffffff;
+    --primary-purple: #4f2c75;
+    --primary-light: #eceaf3;
+    --text-dark: #1a1a1a;
+    --text-muted: #555555;
+    --border-color: #e0e0e0;
+    --border-radius: 0.5rem;
+    --shadow: rgba(0, 0, 0, 0.05);
+    --font-base: 'Inter', sans-serif;
+    --font-size-base: 16px;
+    --font-size-title: 20px;
+    --font-size-body: 14px;
+    --transition: 0.3s ease;
+    --accent: #147A8C;
+    --accent-light: #eceaf3;
+    --radius: 0.75rem;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --timer-bg: #ffdd57;
+    --timer-color: #333;
+}
+
+nbody, .job-listings-container {
+    font-family: var(--font-base);
+    font-size: var(--font-size-base);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.job-listings-container {
+
+    padding: 2rem 1rem;
+}
+.job-listings-container h2 {
+    color: var(--text-dark);
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Grid layout */
+.job-listings-container .job-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Card base */
+.job-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 6px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: box-shadow var(--transition);
+}
+.job-card:hover {
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* Header */
+.job-card .card-header {
+    background-color: var(--primary-light);
+    padding: 1rem;
+}
+.job-card .card-header .card-title {
+    margin: 0;
+    color: var(--primary-purple);
+    font-size: var(--font-size-title);
+    font-weight: 600;
+    word-break: break-word;
+}
+
+/* Divider */
+.job-card .divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0;
+}
+
+/* Body */
+.job-card .card-body {
+    flex: 1;
+    padding: 1rem;
+}
+.job-card .card-body p {
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--font-size-body);
+    line-height: 1.4;
+}
+.job-card .card-body p strong {
+    color: var(--text-dark);
+}
+
+/* Footer Buttons */
+.job-card .card-footer {
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    background-color: var(--card-bg);
+}
+.job-card .btn {
+    flex: 1;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-body);
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    transition: background-color var(--transition), transform var(--transition);
+}
+.job-card .btn:hover {
+    background-color: #432158;
+    color: #fff; 
+    transform: translateY(-2px);
+}
+
+/* Eller mer spesifikt: */
+.job-card .btn-primary:hover,
+.job-card .btn-secondary:hover {
+    /* primærknapp */
+    background-color: #432158;
+    color: #fff; 
+    transform: translateY(-2px);
+}

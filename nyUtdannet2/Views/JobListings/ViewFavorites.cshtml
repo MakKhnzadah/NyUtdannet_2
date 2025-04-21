@@ -2,19 +2,22 @@
 
 @{
     ViewBag.Title = "Dine Favoritter";
-    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/favorites.css" asp-append-version="true" />
+
 }
+
+
 
 <div class="container my-5">
     <h2 class="mb-4 text-center">Dine Favoritter</h2>
 
     @if (Model != null && Model.Any())
     {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="favorites-grid">
             @foreach (var favorite in Model)
             {
                 <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
+                    <div class="fav-card card h-100">
                         <div class="card-body">
                             <h5 class="card-title fw-bold text-primary">@favorite.JobListing.Title</h5>
                             <p class="card-text text-truncate">@favorite.JobListing.Description</p>
@@ -42,3 +45,4 @@
         </div>
     }
 </div>
+

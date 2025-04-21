@@ -4,163 +4,110 @@
     Layout = "_Layout";
 }
 
+@section Head {
+    <link rel="stylesheet" href="~/css/employee-dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
 
 <div class="container employer-dashboard">
+
     <!-- Hero Seksjon -->
-    <div class="row">
-        <div class="col-12">
-            <div class="employer-hero p-5 rounded-4 shadow-lg mb-5" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
-                <div class="text-center">
-                    <h1 class="display-5 fw-bold mb-4 text-dark">Velkommen tilbake, @User.FindFirst("CompanyName")?.Value</h1>
-                    <p class="lead mb-4">
-                        Administrer dine stillingsannonser, søknader og finn de beste kandidatene for din bedrift.
-                    </p>
-                    <div class="d-flex justify-content-center gap-3 mt-4">
-                        <a asp-controller="JobListing" asp-action="Create" class="btn btn-primary btn-lg px-4">
-                            <i class="fas fa-plus-circle me-2"></i>Ny stilling
-                        </a>
-                        <a asp-controller="JobApp" asp-action="EmployerApplications" class="btn btn-outline-primary btn-lg px-4">
-                            <i class="fas fa-list-alt me-2"></i>Se søknader
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <div class="employer-hero">
+        <h1>Velkommen tilbake, @User.FindFirst("CompanyName")?.Value</h1>
+        <p>Administrer dine stillingsannonser, søknader og finn de beste kandidatene for din bedrift.</p>
+        <div>
+            <a asp-controller="JobListings" asp-action="Create" class="btn btn-primary me-3">
+                <i class="fas fa-plus-circle me-2"></i>Ny stilling
+            </a>
+            <a asp-controller="JobApplications" asp-action="Index" class="btn btn-outline-primary">
+                <i class="fas fa-list-alt me-2"></i>Se søknader
+            </a>
         </div>
     </div>
 
     <!-- Hurtigstatistikk -->
-    <div class="row mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card stat-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-3 mx-auto">
-                        <i class="fas fa-briefcase fa-2x"></i>
-                    </div>
-                    <h3 class="h5 fw-bold">Aktive stillinger</h3>
-                    <p class="display-6 fw-bold text-primary">@Model.FullName</p>
-                    <a asp-controller="JobListing" asp-action="Index" class="small">Se alle</a>
-                </div>
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="icon-circle">
+                <i class="fas fa-briefcase"></i>
             </div>
+            <h3>Aktive stillinger</h3>
+            <p>@Model.RecentListings.Count</p>
+            <a asp-controller="JobListings" asp-action="Index" class="small">Se alle</a>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card stat-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-success bg-opacity-10 text-success mb-3 mx-auto">
-                        <i class="fas fa-file-alt fa-2x"></i>
-                    </div>
-                    <h3 class="h5 fw-bold">Nye søknader</h3>
-                    <p class="display-6 fw-bold text-success">@Model.PendingApplications</p>
-                    <a asp-controller="JobApp" asp-action="EmployerApplications" class="small">Se alle</a>
-                </div>
+        <div class="stat-card">
+            <div class="icon-circle">
+                <i class="fas fa-file-alt"></i>
             </div>
+            <h3>Nye søknader</h3>
+            <p>@Model.PendingApplications</p>
+            <a asp-controller="JobApplications" asp-action="Index" class="small">Se alle</a>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card stat-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-info bg-opacity-10 text-info mb-3 mx-auto">
-                        <i class="fas fa-eye fa-2x"></i>
-                    </div>
-                    <h3 class="h5 fw-bold">Sidevisninger</h3>
-                    <p class="display-6 fw-bold text-info">@Model.RecommendedListings</p>
-                    <a asp-controller="Analytics" asp-action="Index" class="small">Se detaljer</a>
-                </div>
+        <div class="stat-card">
+            <div class="icon-circle">
+                <i class="fas fa-eye"></i>
             </div>
+            <h3>Sidevisninger</h3>
+            <p>@Model.RecommendedListings.Count</p>
+            <a asp-controller="Analytics" asp-action="Index" class="small">Se detaljer</a>
         </div>
     </div>
 
     <!-- Siste søknader -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow">
-                <div class="card-header bg-white border-0">
-                    <h3 class="h5 fw-bold mb-0"><i class="fas fa-clock me-2"></i>Siste søknader</h3>
-                </div>
-                <div class="card-body">
-                    @if (ViewBag.RecentApplications != null && ViewBag.RecentApplications.Count > 0)
+    <div class="table-card">
+        <div class="card-header">
+            <h3><i class="fas fa-clock me-2"></i>Siste søknader</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Kandidat</th>
+                    <th>Stilling</th>
+                    <th>Status</th>
+                    <th>Dato</th>
+                    <th>Handling</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (ViewBag.RecentApplications != null && ViewBag.RecentApplications.Count > 0)
+                {
+                    foreach (var app in ViewBag.RecentApplications)
                     {
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Kandidat</th>
-                                    <th>Stilling</th>
-                                    <th>Status</th>
-                                    <th>Dato</th>
-                                    <th>Handling</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var app in ViewBag.RecentApplications)
-                                {
-                                    <tr>
-                                        <td>@app.User.FirstName @app.User.LastName</td>
-                                        <td>@app.JobListing.Title</td>
-                                        <td><span class="badge bg-@(app.Status == "Pending" ? "warning" : app.Status == "Accepted" ? "success" : "danger")">@app.Status</span></td>
-                                        <td>@app.SubmittedDate.ToString("dd.MM.yyyy")</td>
-                                        <td>
-                                            <a asp-controller="JobApp" asp-action="Details" asp-route-id="@app.Id" class="btn btn-sm btn-outline-primary">Detaljer</a>
-                                        </td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                        <tr>
+                            <td>@app.User.FirstName @app.User.LastName</td>
+                            <td>@app.JobListing.Title</td>
+                            <td>
+                                    <span class="badge bg-@(app.Status == "Submitted" ? "warning" : app.Status == "Accepted" ? "success" : "danger")">
+                                        @app.Status
+                                    </span>
+                            </td>
+                            <td>@app.SubmittedDate.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                <a asp-controller="JobApplications" asp-action="Details" asp-route-id="@app.Id" class="btn btn-sm btn-outline-primary">
+                                    Detaljer
+                                </a>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <div class="alert alert-info mb-0">
-                            Ingen nye søknader å vise.
-                        </div>
-                    }
-                </div>
-            </div>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Ingen nye søknader å vise.</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
         </div>
     </div>
+
 </div>
 
-<style>
-    .employer-hero {
-        border: none;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .icon-circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .stat-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 12px;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
-
-    .employer-dashboard {
-        padding-top: 2rem;
-        padding-bottom: 4rem;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.05);
-    }
-</style>
-
-@section Scripts{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
+@section Scripts {
     <script>
-        // Eventuell JavaScript for dashboardet
         $(document).ready(function() {
             console.log("Employer dashboard loaded");
         });

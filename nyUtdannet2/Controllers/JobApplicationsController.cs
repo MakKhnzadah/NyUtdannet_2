@@ -5,6 +5,7 @@ using nyUtdannet2.Models;
 using nyUtdannet2.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
 
 namespace nyUtdannet2.Controllers
 {
@@ -14,15 +15,18 @@ namespace nyUtdannet2.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<JobApplicationsController> _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public JobApplicationsController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            ILogger<JobApplicationsController> logger)
+            ILogger<JobApplicationsController> logger,
+            IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _context = context;
             _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -130,6 +134,125 @@ namespace nyUtdannet2.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Employee")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplyWithFiles(JobApp model, IFormFile resumeFile, IFormFile coverLetterFile)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Apply", model);
+            }
+
+            try
+            {
+                var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
+                model.UserId = userId;
+                model.SubmittedDate = DateTime.UtcNow;
+                model.UpdatedDate = DateTime.UtcNow;
+                model.Status = ApplicationStatus.Submitted;
+
+                // Handle resume upload
+                if (resumeFile != null && resumeFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "resumes");
+                    Directory.CreateDirectory(uploadsFolder); // Make sure directory exists
+                    
+                    var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(resumeFile.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await resumeFile.CopyToAsync(stream);
+                    }
+                    
+                    model.ResumePath = $"/uploads/resumes/{uniqueFileName}";
+                }
+
+                // Handle cover letter upload
+                if (coverLetterFile != null && coverLetterFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "coverletters");
+                    Directory.CreateDirectory(uploadsFolder); // Make sure directory exists
+                    
+                    var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(coverLetterFile.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await coverLetterFile.CopyToAsync(stream);
+                    }
+                    
+                    model.CoverLetterPath = $"/uploads/coverletters/{uniqueFileName}";
+                }
+
+                _context.JobApps.Add(model);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Application submitted successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error submitting job application with files");
+                ModelState.AddModelError("", "An error occurred while submitting your application");
+                return View("Apply", model);
+            }
+        }
+
+        public async Task<IActionResult> DownloadFile(int applicationId, string fileType)
+        {
+            // Check permissions - employers can download files for applications to their jobs
+            // and employees can download their own files
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+            
+            var application = await _context.JobApps
+                .Include(a => a.JobListing)
+                .FirstOrDefaultAsync(a => a.Id == applicationId);
+                
+            if (application == null) return NotFound();
+            
+            bool isAuthorized = false;
+            
+            if (await _userManager.IsInRoleAsync(user, "Employer"))
+            {
+                isAuthorized = application.JobListing.EmployerUserId == user.Id;
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Employee"))
+            {
+                isAuthorized = application.UserId == user.Id;
+            }
+            
+            if (!isAuthorized) return Forbid();
+            
+            // Determine which file to download
+            string filePath = null;
+            string contentType = "application/octet-stream";
+            string fileName = "";
+            
+            if (fileType.Equals("resume", StringComparison.OrdinalIgnoreCase))
+            {
+                filePath = Path.Combine(_webHostEnvironment.WebRootPath, application.ResumePath.TrimStart('/'));
+                fileName = $"Resume-{application.Id}.pdf";
+                contentType = "application/pdf";
+            }
+            else if (fileType.Equals("coverletter", StringComparison.OrdinalIgnoreCase))
+            {
+                filePath = Path.Combine(_webHostEnvironment.WebRootPath, application.CoverLetterPath.TrimStart('/'));
+                fileName = $"CoverLetter-{application.Id}.pdf";
+                contentType = "application/pdf";
+            }
+            
+            if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+            
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(fileBytes, contentType, fileName);
+        }
+
         [Authorize(Roles = "Employer")]
         public async Task<IActionResult> Details(int id)
         {
@@ -229,6 +352,50 @@ namespace nyUtdannet2.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Employer")]
+        public async Task<IActionResult> SearchCandidates(string skills, string status)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
+            // Base query - get applications for employer's job listings
+            var query = _context.JobApps
+                .Include(a => a.User)
+                .Include(a => a.JobListing)
+                .Where(a => a.JobListing.EmployerUserId == userId);
+            
+            // Filter by status if specified
+            if (!string.IsNullOrEmpty(status) && Enum.TryParse<ApplicationStatus>(status, true, out var statusEnum))
+            {
+                query = query.Where(a => a.Status == statusEnum);
+            }
+            
+            // Get the applications
+            var applications = await query.OrderByDescending(a => a.SubmittedDate).ToListAsync();
+            
+            // If skills are specified, filter the already retrieved applications
+            // This is done in memory because we need to search through the content and summary fields
+            if (!string.IsNullOrEmpty(skills))
+            {
+                // Split skills into individual terms for more precise matching
+                var skillTerms = skills.ToLower().Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                
+                applications = applications
+                    .Where(a => 
+                        skillTerms.Any(term => 
+                            (a.Summary?.ToLower().Contains(term) ?? false) || 
+                            (a.Content?.ToLower().Contains(term) ?? false) ||
+                            (a.Title?.ToLower().Contains(term) ?? false))
+                    )
+                    .ToList();
+            }
+            
+            ViewBag.Skills = skills;
+            ViewBag.Status = status;
+            
+            return View("CandidateSearchResults", applications);
         }
     }
 }
