@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-page: #f7f7fa;
+    --bg-card: #ffffff;
+    --primary: #147A8C;
+    --primary-light: #E0F7FA;
+    --danger: #E53E3E;
+    --text-dark: #1A1A1A;
+    --text-muted: #555555;
+    --border-radius: 0.75rem;
+    --shadow: rgba(0,0,0,0.05);
+    --font-base: 'Inter', sans-serif;
+    --transition: 0.3s ease;
+}
+
+body .profile-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    background-color: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow);
+    font-family: var(--font-base);
+}
+
+.profile-container h2 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.profile-container dl.row {
+    margin-bottom: 2rem;
+}
+
+.profile-container dt {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+.profile-container dd {
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+}
+
+.profile-container .btn {
+    border-radius: var(--border-radius);
+    padding: 0.6rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color var(--transition), transform var(--transition);
+}
+.profile-container .btn-primary {
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    margin-right: 1rem;
+}
+.profile-container .btn-primary:hover {
+    background-color: #0f5f6d;
+    transform: translateY(-2px);
+}
+.profile-container .btn-danger {
+    background-color: var(--danger);
+    color: #fff;
+    border: none;
+}
+.profile-container .btn-danger:hover {
+    background-color: #c53030;
+    transform: translateY(-2px);
+}

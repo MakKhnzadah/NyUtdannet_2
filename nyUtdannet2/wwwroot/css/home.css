@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 /* home.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+=======
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+>>>>>>> 66f5694 (Displayed more user info, updated user profile, added account deletion, and moved CSS to separate files for both pages)
 
 :root {
     --font-base: 'Inter', sans-serif;

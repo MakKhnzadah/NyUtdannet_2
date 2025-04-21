@@ -1,22 +1,45 @@
 @model nyUtdannet2.Models.ApplicationUser
 @{
     ViewData["Title"] = "Min profil";
-    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
 }
 
-<div class="container py-5">
-    <h2 class="mb-4">Min profil</h2>
+<div class="profile-container">
+    <h2>Min profil</h2>
+
     <dl class="row">
-        <dt class="col-sm-3">Brukernavn</dt>
-        <dd class="col-sm-9">@Model.UserName</dd>
+        <dt class="col-sm-4">Brukernavn</dt>
+        <dd class="col-sm-8">@Model.UserName</dd>
 
-        <dt class="col-sm-3">E‑post</dt>
-        <dd class="col-sm-9">@Model.Email</dd>
+        <dt class="col-sm-4">E‑post</dt>
+        <dd class="col-sm-8">@Model.Email</dd>
 
-        <dt class="col-sm-3">Fornavn</dt>
-        <dd class="col-sm-9">@Model.FirstName</dd>
+        <dt class="col-sm-4">Fornavn</dt>
+        <dd class="col-sm-8">@Model.FirstName</dd>
 
-        <dt class="col-sm-3">Etternavn</dt>
-        <dd class="col-sm-9">@Model.LastName</dd>
+        <dt class="col-sm-4">Etternavn</dt>
+        <dd class="col-sm-8">@Model.LastName</dd>
+
+        <dt class="col-sm-4">Fødselsdato</dt>
+        <dd class="col-sm-8">@Model.DateOfBirth.ToString("dd.MM.yyyy")</dd>
+
+        <dt class="col-sm-4">Gateadresse</dt>
+        <dd class="col-sm-8">@Model.StreetName @Model.StreetNumber</dd>
+
+        <dt class="col-sm-4">Postnummer</dt>
+        <dd class="col-sm-8">@Model.PostalCode</dd>
+
+        <dt class="col-sm-4">By</dt>
+        <dd class="col-sm-8">@Model.City</dd>
+
+        <dt class="col-sm-4">Land</dt>
+        <dd class="col-sm-8">@Model.Country</dd>
     </dl>
+
+    <a asp-action="EditProfile" class="btn btn-primary">Rediger profil</a>
+    <form asp-action="DeleteAccount" method="post" class="d-inline"
+          onsubmit="return confirm('Er du sikker på at du vil slette kontoen din?');">
+        <button type="submit" class="btn btn-danger">Slett konto</button>
+    </form>
 </div>

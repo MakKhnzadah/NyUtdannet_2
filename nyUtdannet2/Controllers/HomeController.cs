@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using nyUtdannet2.Models;
 using nyUtdannet2.Data;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace nyUtdannet2.Controllers
@@ -47,6 +48,7 @@ namespace nyUtdannet2.Controllers
             return View("Index"); 
         }
         
+        // Her viser jeg profil til brukeren.
         
         [Authorize]
         public async Task<IActionResult> Profile()
@@ -62,7 +64,87 @@ namespace nyUtdannet2.Controllers
             return View(user);
         }
 
+        // End av vis bruker profil
+        
+        // Endre bruker profil 
 
+        [Authorize]
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Index", "Home");
+
+            var vm = new EditProfileViewModel
+            {
+                Id           = user.Id,
+                FirstName    = user.FirstName,
+                LastName     = user.LastName,
+                DateOfBirth  = user.DateOfBirth,
+                StreetName   = user.StreetName,
+                StreetNumber = user.StreetNumber,
+                PostalCode   = user.PostalCode,
+                City         = user.City,
+                Country      = user.Country
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return RedirectToAction("Index", "Home");
+
+            user.FirstName    = model.FirstName;
+            user.LastName     = model.LastName;
+            user.DateOfBirth  = model.DateOfBirth;
+            user.StreetName   = model.StreetName;
+            user.StreetNumber = model.StreetNumber;
+            user.PostalCode   = model.PostalCode;
+            user.City         = model.City;
+            user.Country      = model.Country;
+            user.UpdatedDate  = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Profilen din er oppdatert!";
+                return RedirectToAction(nameof(Profile));
+            }
+            foreach (var err in result.Errors)
+                ModelState.AddModelError("", err.Description);
+
+            return View(model);
+        }
+        
+        // End av redigere profil
+        
+        
+        // Slette profil
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Index", "Home");
+
+            // Logg ut først
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            // Slett bruker og tilknyttede data om ønskelig
+            await _userManager.DeleteAsync(user);
+
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // End av slette bruker
 
 
         

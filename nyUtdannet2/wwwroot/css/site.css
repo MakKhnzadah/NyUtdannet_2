@@ -63,8 +63,10 @@ body, html {
     transition: background-color 0.3s;
 }
 
-.logout-btn:hover {
-    background-color: #005e6a;
+.navbar-nav .logout:hover {
+    background-color: #432158;
+    color: #fff;
+    transform: translateY(-2px);
 }
 
 .search-section {
@@ -108,4 +110,19 @@ body, html {
     display: flex;
     gap: 20px;
     font-size: 0.95rem;
+}
+/* Logout‐knapp med ikon */
+.navbar-nav .logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #147A8C;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
