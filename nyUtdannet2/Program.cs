@@ -33,6 +33,12 @@ public class Program
         builder.Services.AddRazorPages();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+        // Ensure upload directories exist
+        var resumeUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "resumes");
+        var coverLetterUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "coverletters");
+        Directory.CreateDirectory(resumeUploadDir);
+        Directory.CreateDirectory(coverLetterUploadDir);
+
         var app = builder.Build();
 
         // --- Database Initialization ---

@@ -1,9 +1,62 @@
 @model nyUtdannet2.Controllers.EmployerDashboardViewModel
 
-
 @{
-    ViewBag.Title = "title";
+    ViewData["Title"] = "Arbeidsgiver Dashboard";
     Layout = "_Layout";
 }
 
-<h2>For business!</h2>
+@section Head {
+    <link rel="stylesheet" href="~/css/employer-dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
+
+<div class="container employer-dashboard">
+
+    <!-- Hero Seksjon -->
+    <div class="employer-hero">
+        <h1>Velkommen tilbake, @User.FindFirst("CompanyName")?.Value</h1>
+        <p>Administrer dine stillingsannonser, søknader og finn de beste kandidatene for din bedrift.</p>
+        <div>
+            <a asp-controller="JobListings" asp-action="Create" class="btn btn-primary me-3">
+                <i class="fas fa-plus-circle me-2"></i>Ny stilling
+            </a>
+            <a asp-controller="JobApplications" asp-action="SearchCandidates" class="btn btn-success me-3">
+                <i class="fas fa-search me-2"></i>Søk kandidater
+            </a>
+            <a asp-controller="JobListings" asp-action="Index" class="btn btn-outline-primary">
+                <i class="fas fa-briefcase me-2"></i>Administrer stillinger
+            </a>
+        </div>
+    </div>
+
+    <!-- Hurtiglenker -->
+    <div class="quick-links-grid">
+        <a asp-controller="JobListings" asp-action="Create" class="quick-link-card">
+            <i class="fas fa-plus-circle"></i>
+            <span>Legg til jobb</span>
+        </a>
+        <a asp-controller="JobListings" asp-action="Index" class="quick-link-card">
+            <i class="fas fa-edit"></i>
+            <span>Rediger jobber</span>
+        </a>
+        <a asp-controller="JobApplications" asp-action="SearchCandidates" class="quick-link-card">
+            <i class="fas fa-search"></i>
+            <span>Søk kandidater</span>
+        </a>
+        <a asp-controller="JobApplications" asp-action="Index" class="quick-link-card">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Se jobbsøknader</span>
+        </a>
+    </div>
+
+    <!-- Statistikk -->
+    <div class="section-header">
+        <h2>Oversikt</h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // JavaScript for interaktive funksjoner kan legges her
+    </script>
+}

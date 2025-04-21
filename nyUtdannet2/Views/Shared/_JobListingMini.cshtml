@@ -1,22 +1,57 @@
 ﻿@model nyUtdannet2.Models.JobListing
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Job Listing Details";
+    var isEmployer = User.IsInRole("Employer");
+    var isCurrentUserEmployer = isEmployer && Model.EmployerUserId == UserManager.GetUserId(User);
 }
 
 <div class="card mb-4 job-card">
-    <div class="card-header text-white bg-gradient">
+    <div class="card-header text-white @(isCurrentUserEmployer ? "bg-primary" : "bg-gradient")">
         <h3 class="card-title mb-0">@Model.Title</h3>
     </div>
     <div class="card-body">
-        <p><strong>Beskrivelse:</strong><br /> @Model.Description</p>
-        <p><strong>Krav:</strong><br /> @Model.Requirements</p>
-        <p><strong>Opprettet:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
-        <p><strong>Frist dato:</strong> @Model.Deadline.ToString("yyyy-MM-dd")</p>
+        <p><strong>Beskrivelse:</strong><br />@(Model.Description.Length > 100 ? Model.Description.Substring(0, 100) + "..." : Model.Description)</p>
+        <p><strong>Krav:</strong><br />@(Model.Requirements.Length > 100 ? Model.Requirements.Substring(0, 100) + "..." : Model.Requirements)</p>
+        <div class="d-flex justify-content-between">
+            <p><strong>Opprettet:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>Frist:</strong> @Model.Deadline.ToString("yyyy-MM-dd")</p>
+        </div>
+        @if (!Model.IsActive)
+        {
+            <div class="alert alert-warning mt-2 mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>Denne stillingen er ikke aktiv
+            </div>
+        }
     </div>
-    <div class="card-footer d-flex justify-content-between">
-        <a asp-action="ViewJobListing" asp-route-jobListingId="@Model.Id" class="btn btn-luxury">Vis detaljer</a>
-        <a asp-action="AddToFavorites" asp-route-jobListingId="@Model.Id" class="btn btn-gold">Legg til favoritt</a>
+    <div class="card-footer d-flex @(isCurrentUserEmployer ? "justify-content-between" : "justify-content-end")">
+        @if (isCurrentUserEmployer)
+        {
+            <div>
+                <a asp-controller="JobListings" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                    <i class="fas fa-edit me-1"></i>Rediger
+                </a>
+                <a asp-controller="JobListings" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                    <i class="fas fa-trash-alt me-1"></i>Slett
+                </a>
+            </div>
+        }
+        <div>
+            <a asp-controller="JobListings" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="fas fa-info-circle me-1"></i>Vis detaljer
+            </a>
+            @if (!isEmployer)
+            {
+                <form asp-controller="JobListings" asp-action="ToggleFavorite" method="post" class="d-inline ms-2">
+                    <input type="hidden" name="jobListingId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="far fa-heart me-1"></i>Favoritt
+                    </button>
+                </form>
+            }
+        </div>
     </div>
 </div>
 

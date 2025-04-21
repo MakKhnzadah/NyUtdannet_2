@@ -355,8 +355,20 @@ namespace nyUtdannet2.Controllers
         }
 
         [Authorize(Roles = "Employer")]
-        public async Task<IActionResult> SearchCandidates(string skills, string status)
+        public async Task<IActionResult> SearchCandidates()
         {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
+            // You could pre-populate with data if needed, for now just showing the search interface
+            return View("CandidateSearch");
+        }
+        
+        [Authorize(Roles = "Employer")]
+        [HttpGet("JobApplications/SearchCandidatesResults")]
+        public async Task<IActionResult> SearchCandidatesResults(string skills, string status)
+        {
+            // Existing search implementation moved to a separate route
             var userId = _userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
             
