@@ -2,4 +2,6 @@ bin/
 obj/
 /packages/
 riderModule.iml
-/_ReSharper.Caches/
+/_ReSharper.Caches/nyUtdannet2/nyUtdannet2.db
+nyUtdannet2/nyUtdannet2.db-shm
+nyUtdannet2/nyUtdannet2.db-wal
