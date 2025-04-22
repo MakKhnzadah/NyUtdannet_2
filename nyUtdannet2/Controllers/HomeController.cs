@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using nyUtdannet2.Models;
 using nyUtdannet2.Data;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace nyUtdannet2.Controllers
@@ -118,6 +119,25 @@ namespace nyUtdannet2.Controllers
          // End av redigere profil
 
 
+         
+         // Slette profil
+         
+         [HttpPost]
+         [Authorize]
+         [ValidateAntiForgeryToken]
+         public async Task<IActionResult> DeleteAccount()
+         {
+             var user = await _userManager.GetUserAsync(User);
+             if (user == null) return RedirectToAction("Index", "Home");
+ 
+             // Logg ut først
+             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+             await _userManager.DeleteAsync(user);
+ 
+ 
+             return RedirectToAction("Index", "Home");
+         }
+         // End av slette bruker
 
         
         public IActionResult Privacy()
