@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-page: #f7f7fa;
+    --bg-card: #ffffff;
+    --primary: #147A8C;
+    --primary-light: #E0F7FA;
+    --danger: #E53E3E;
+    --text-dark: #1A1A1A;
+    --text-muted: #555555;
+    --border: #E2E8F0;
+    --radius: 0.75rem;
+    --shadow: rgba(0,0,0,0.05);
+    --transition: 0.3s ease;
+    --font-base: 'Inter', sans-serif;
+}
+
+.edit-profile-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background-color: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px var(--shadow);
+    font-family: var(--font-base);
+}
+
+.edit-profile-container h2 {
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.edit-profile-container form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.75rem 1rem;
+}
+
+.edit-profile-container .mb-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-profile-container .form-control {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+.edit-profile-container .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(20,122,140,0.2);
+}
+
+.edit-profile-container .text-danger {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #E53E3E;
+}
+
+.edit-profile-container .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: var(--radius);
+    transition: background-color var(--transition), transform var(--transition);
+}
+.edit-profile-container .btn-success {
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+}
+.edit-profile-container .btn-success:hover {
+    background-color: #432158;
+    color: #fff;
+    transform: translateY(-2px);
+}
+.edit-profile-container .btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+}
+.edit-profile-container .btn-secondary:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+.edit-profile-container .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
