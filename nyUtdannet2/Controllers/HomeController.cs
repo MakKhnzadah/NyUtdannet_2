@@ -16,15 +16,18 @@ namespace nyUtdannet2.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public HomeController(
             ILogger<HomeController> logger,
             UserManager<ApplicationUser> userManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            SignInManager<ApplicationUser> signInManager)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _signInManager = signInManager;
         }
         
         // This action can be accessed without login
@@ -127,6 +130,82 @@ namespace nyUtdannet2.Controllers
         }
          
         // End av redigere profil
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            // Get the current logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            try
+            {
+                // Check if user has job listings (for employers)
+                if (await _userManager.IsInRoleAsync(user, "Employer"))
+                {
+                    var hasJobListings = await _context.JobListings
+                        .AnyAsync(j => j.EmployerUserId == user.Id);
+                    
+                    if (hasJobListings)
+                    {
+                        TempData["Error"] = "Kan ikke slette kontoen fordi du har publiserte jobbannonser.";
+                        return RedirectToAction(nameof(Profile));
+                    }
+                }
+                
+                // Remove favorites
+                var favorites = await _context.Favorites
+                    .Where(f => f.UserId == user.Id)
+                    .ToListAsync();
+                
+                _context.Favorites.RemoveRange(favorites);
+                
+                // Remove job applications (for employees)
+                var applications = await _context.JobApps
+                    .Where(a => a.UserId == user.Id)
+                    .ToListAsync();
+                
+                _context.JobApps.RemoveRange(applications);
+                
+                await _context.SaveChangesAsync();
+                
+                // Delete the user
+                var result = await _userManager.DeleteAsync(user);
+                
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User account deleted successfully");
+                    
+                    // Sign out the user
+                    await _signInManager.SignOutAsync();
+                    
+                    // Add success message
+                    TempData["SuccessMessage"] = "Din konto har blitt slettet.";
+                    
+                    // Redirect to home page
+                    return RedirectToAction("Index");
+                }
+                
+                // If deletion fails, add errors and return to profile
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                
+                return RedirectToAction(nameof(Profile));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting user account: {UserId}", user.Id);
+                TempData["Error"] = "Det oppstod en feil ved sletting av kontoen.";
+                return RedirectToAction(nameof(Profile));
+            }
+        }
 
         public IActionResult Privacy()
         {
