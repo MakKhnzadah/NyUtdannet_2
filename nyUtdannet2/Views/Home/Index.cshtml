@@ -1,4 +1,8 @@
-﻿@{
+﻿@model IEnumerable<nyUtdannet2.Models.JobListing>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
     ViewData["Title"] = "Hjem - Ny utdannet";
 }
 
@@ -38,9 +42,54 @@
     <div class="featured-jobs">
         <h2>Utvalgte stillinger</h2>
         <div class="jobs-grid">
-            <!-- This will be populated dynamically with job listings -->
-            <p class="text-center w-100">Logg inn for å se nye stillinger tilpasset din profil</p>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var job in Model)
+                {
+                    <div class="job-card">
+                        <div class="job-header">
+                            <h3>@job.Title</h3>
+                            <span class="company">@job.EmployerUser?.CompanyName</span>
+                        </div>
+                        <div class="job-body">
+                            <p class="job-desc">@(job.Headline?.Length > 100 ? job.Headline?.Substring(0, 97) + "..." : job.Headline)</p>
+                            <div class="job-details">
+                                <span class="location"><i class="bi bi-geo-alt"></i> @job.City</span>
+                                <span class="type"><i class="bi bi-briefcase"></i> @job.EmploymentType</span>
+                            </div>
+                        </div>
+                        <div class="job-footer">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <a asp-controller="JobListings" asp-action="Details" asp-route-id="@job.Id" class="btn btn-primary btn-sm">Se detaljer</a>
+                            }
+                            else
+                            {
+                                <div class="login-prompt">
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary btn-sm">Logg inn for å se detaljer</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info w-100">
+                    <p class="text-center">Ingen stillingsannonser er tilgjengelige for øyeblikket.</p>
+                </div>
+            }
         </div>
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <div class="login-banner mt-4 text-center">
+                <p>Logg inn for å se flere stillinger og få personlige anbefalinger</p>
+                <div class="mt-2">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Logg inn</a>
+                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-primary ms-2">Registrer deg</a>
+                </div>
+            </div>
+        }
     </div>
 
     <!-- About section -->
@@ -65,9 +114,47 @@
             </div>
         </div>
     </div>
+
+    <!-- Registration banner at the bottom -->
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="register-banner">
+            <div class="register-content">
+                <h2>Klar for å komme i gang?</h2>
+                <p>Registrer deg nå for å finne din neste jobb eller den perfekte kandidaten</p>
+                <div class="register-options">
+                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-userType="Employee" class="btn btn-light">
+                        <i class="bi bi-mortarboard"></i> Registrer som jobbsøker
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-userType="Employer" class="btn btn-light">
+                        <i class="bi bi-building"></i> Registrer som arbeidsgiver
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @section Head {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Add smooth scrolling to "Se alle stillinger" button
+            $('a[href="#featured-jobs"]').on('click', function(event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    var hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top
+                    }, 800, function(){
+                        window.location.hash = hash;
+                    });
+                }
+            });
+        });
+    </script>
 }
 
