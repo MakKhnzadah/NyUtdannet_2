@@ -40,4 +40,9 @@
     </dl>
     
     <a asp-action="EditProfile" class="btn btn-primary">Rediger profil</a>
+
+    <form asp-action="DeleteAccount" method="post" class="d-inline"
+          onsubmit="return confirm('Er du sikker på at du vil slette kontoen din?');">
+        <button type="submit" class="btn btn-danger">Slett konto</button>
+    </form>
 </div>
