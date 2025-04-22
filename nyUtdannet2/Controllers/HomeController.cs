@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace nyUtdannet2.Controllers
 {
-    [Authorize]
+    // Remove blanket [Authorize] to allow anonymous access to specific actions
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,25 +26,37 @@ namespace nyUtdannet2.Controllers
             _userManager = userManager;
             _context = context;
         }
+        
+        // This action can be accessed without login
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
+            // Check if user is authenticated
+            if (User.Identity?.IsAuthenticated == true)
             {
-                return RedirectToAction("Login", "Account"); 
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user != null)
+                {
+                    if (await _userManager.IsInRoleAsync(user, "Employer"))
+                    {
+                        return RedirectToAction("EmployerHome");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Employee"))
+                    {
+                        return RedirectToAction("EmployeeHome");
+                    }
+                }
             }
 
-            if (await _userManager.IsInRoleAsync(user, "Employer"))
-            {
-                return RedirectToAction("EmployerHome");
-            }
-            else if (await _userManager.IsInRoleAsync(user, "Employee"))
-            {
-                return RedirectToAction("EmployeeHome");
-            }
+            // For anonymous users or users without specific roles
+            var featuredJobs = await _context.JobListings
+                .Where(j => j.IsActive && j.Deadline > DateTime.UtcNow)
+                .OrderByDescending(j => j.CreatedDate)
+                .Take(3)
+                .Include(j => j.EmployerUser)
+                .ToListAsync();
 
-            return View("Index"); 
+            return View(featuredJobs);
         }
         
         [Authorize]
@@ -57,69 +69,65 @@ namespace nyUtdannet2.Controllers
             }
             return View(user);
         }
-        // End av vise bruker profil
         
         // Start av redigere bruker profil
-         [Authorize]
-         public async Task<IActionResult> EditProfile()
-         {
-             var user = await _userManager.GetUserAsync(User);
-             if (user == null) return RedirectToAction("Index", "Home");
+        [Authorize]
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Index", "Home");
  
-             var vm = new EditProfileViewModel
-             {
-                 Id           = user.Id,
-                 FirstName    = user.FirstName,
-                 LastName     = user.LastName,
-                 DateOfBirth  = user.DateOfBirth,
-                 StreetName   = user.StreetName,
-                 StreetNumber = user.StreetNumber,
-                 PostalCode   = user.PostalCode,
-                 City         = user.City,
-                 Country      = user.Country
-             };
-             return View(vm);
-         }
+            var vm = new EditProfileViewModel
+            {
+                Id           = user.Id,
+                FirstName    = user.FirstName,
+                LastName     = user.LastName,
+                DateOfBirth  = user.DateOfBirth,
+                StreetName   = user.StreetName,
+                StreetNumber = user.StreetNumber,
+                PostalCode   = user.PostalCode,
+                City         = user.City,
+                Country      = user.Country
+            };
+            return View(vm);
+        }
  
-         [HttpPost]
-         [Authorize]
-         [ValidateAntiForgeryToken]
-         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
-         {
-             if (!ModelState.IsValid)
-                 return View(model);
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
  
-             var user = await _userManager.FindByIdAsync(model.Id);
-             if (user == null)
-                 return RedirectToAction("Index", "Home");
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return RedirectToAction("Index", "Home");
  
-             user.FirstName    = model.FirstName;
-             user.LastName     = model.LastName;
-             user.DateOfBirth  = model.DateOfBirth;
-             user.StreetName   = model.StreetName;
-             user.StreetNumber = model.StreetNumber;
-             user.PostalCode   = model.PostalCode;
-             user.City         = model.City;
-             user.Country      = model.Country;
-             user.UpdatedDate  = DateTime.UtcNow;
+            user.FirstName    = model.FirstName;
+            user.LastName     = model.LastName;
+            user.DateOfBirth  = model.DateOfBirth;
+            user.StreetName   = model.StreetName;
+            user.StreetNumber = model.StreetNumber;
+            user.PostalCode   = model.PostalCode;
+            user.City         = model.City;
+            user.Country      = model.Country;
+            user.UpdatedDate  = DateTime.UtcNow;
  
-             var result = await _userManager.UpdateAsync(user);
-             if (result.Succeeded)
-             {
-                 TempData["Message"] = "Profilen din er oppdatert!";
-                 return RedirectToAction(nameof(Profile));
-             }
-             foreach (var err in result.Errors)
-                 ModelState.AddModelError("", err.Description);
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Profilen din er oppdatert!";
+                return RedirectToAction(nameof(Profile));
+            }
+            foreach (var err in result.Errors)
+                ModelState.AddModelError("", err.Description);
  
-             return View(model);
-         }
+            return View(model);
+        }
          
-         // End av redigere profil
+        // End av redigere profil
 
-
-
-        
         public IActionResult Privacy()
         {
             return View();
