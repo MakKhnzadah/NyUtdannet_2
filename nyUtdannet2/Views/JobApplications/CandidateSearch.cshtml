@@ -1,0 +1,102 @@
+@{
+    ViewBag.Title = "Søk etter kandidater";
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Søk etter kandidater</h2>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Tilbake til søknader
+            </a>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Finn kandidater med spesifikke ferdigheter</h5>
+            
+            <form asp-action="SearchCandidatesResults" method="get" class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="skills" class="form-label">Ferdigheter</label>
+                        <input type="text" name="skills" id="skills" class="form-control" 
+                               placeholder="F.eks: C#, database, ledelse, markedsføring, salg">
+                        <div class="form-text">Separate ferdigheter med komma eller mellomrom</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="status" class="form-label">Søknadsstatus</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="">Alle statuser</option>
+                            <option value="Submitted">Innsendt</option>
+                            <option value="UnderReview">Under vurdering</option>
+                            <option value="Interviewing">Intervju</option>
+                            <option value="Offered">Tilbud sendt</option>
+                            <option value="Accepted">Tilbud akseptert</option>
+                            <option value="Rejected">Avslått</option>
+                            <option value="Withdrawn">Trukket</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Søk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Ledige stillinger</h5>
+            <p>Velg en av dine ledige stillinger for å se alle søknadene:</p>
+            
+            <div id="jobListingsContainer">
+                <p class="text-center text-muted">Laster inn stillinger...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Fetch employer's job listings when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/employerjobs')
+                .then(response => response.json())
+                .then(jobs => {
+                    const container = document.getElementById('jobListingsContainer');
+                    
+                    if (jobs && jobs.length > 0) {
+                        container.innerHTML = '<ul class="list-group">';
+                        jobs.forEach(job => {
+                            container.innerHTML += `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>${job.title}</strong>
+                                        <small class="text-muted ms-2">Frist: ${new Date(job.deadline).toLocaleDateString()}</small>
+                                    </div>
+                                    <a href="/JobApplications/JobApplications/${job.id}" class="btn btn-sm btn-outline-primary">
+                                        Vis søknader
+                                    </a>
+                                </li>`;
+                        });
+                        container.innerHTML += '</ul>';
+                    } else {
+                        container.innerHTML = '<p class="text-center">Du har ingen aktive stillinger for øyeblikket.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching jobs:', error);
+                    document.getElementById('jobListingsContainer').innerHTML = 
+                        '<p class="text-center text-danger">Kunne ikke laste stillinger. Vennligst prøv igjen senere.</p>';
+                });
+        });
+    </script>
+}

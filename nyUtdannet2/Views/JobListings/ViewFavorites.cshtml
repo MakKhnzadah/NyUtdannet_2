@@ -1,0 +1,48 @@
+﻿@model IEnumerable<nyUtdannet2.Models.Favorite>
+
+@{
+    ViewBag.Title = "Dine Favoritter";
+    <link rel="stylesheet" href="~/css/favorites.css" asp-append-version="true" />
+
+}
+
+
+
+<div class="container my-5">
+    <h2 class="mb-4 text-center">Dine Favoritter</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="favorites-grid">
+            @foreach (var favorite in Model)
+            {
+                <div class="col">
+                    <div class="fav-card card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-primary">@favorite.JobListing.Title</h5>
+                            <p class="card-text text-truncate">@favorite.JobListing.Description</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            <a href="@Url.Action("ViewJobListing", "JobListings", new { jobListingId = favorite.JobListingId })" 
+                               class="btn btn-outline-primary btn-sm">Vis stilling</a>
+
+                            <form asp-action="DeleteFavorite" asp-route-id="@favorite.Id" method="post" class="m-0">
+                                <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                        onclick="return confirm('Er du sikker på at du vil fjerne denne favoritten?');">
+                                    Slett favoritt
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-4">
+            You don't have any favorites yet.
+        </div>
+    }
+</div>
+

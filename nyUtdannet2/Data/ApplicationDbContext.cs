@@ -18,6 +18,7 @@ namespace nyUtdannet2.Data
         public DbSet<JobApp> JobApps { get; set; }  
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<EmployerUser> EmployerUsers { get; set; }
+        public DbSet<Page> Pages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

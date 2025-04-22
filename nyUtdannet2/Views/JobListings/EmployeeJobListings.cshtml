@@ -5,22 +5,25 @@
     Layout = "_Layout";
 }
 
-<div class="container my-5">
-    <h2 class="mb-4">Tilgjengelige stillingsannonser</h2>
+@section Head {
+    <link rel="stylesheet" href="~/css/joblisting-mini.css" asp-append-version="true" />
+}
 
-    @if (Model != null && Model.Any())
+<div class="job-listings-container">
+    <h2 class="mb-4 text-center">Tilgjengelige stillingsannonser</h2>
+    @if (Model?.Any() == true)
     {
-        <div class="row g-4">
-            @foreach (var jobListing in Model)
+        <div class="job-listings-grid">
+            @foreach (var job in Model)
             {
-                <div class="col-md-6 col-lg-4">
-                    <partial name="_JobListingMini" model="jobListing" />
-                </div>
+                <partial name="_JobListingMini" model="job" />
             }
         </div>
     }
     else
     {
-        <p>Ingen stillingsannonser er tilgjengelige for øyeblikket.</p>
+        <div class="alert alert-info text-center">
+            Ingen stillingsannonser er tilgjengelige for øyeblikket.
+        </div>
     }
 </div>

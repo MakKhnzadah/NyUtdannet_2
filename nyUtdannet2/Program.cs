@@ -33,6 +33,12 @@ public class Program
         builder.Services.AddRazorPages();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+        // Ensure upload directories exist
+        var resumeUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "resumes");
+        var coverLetterUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "coverletters");
+        Directory.CreateDirectory(resumeUploadDir);
+        Directory.CreateDirectory(coverLetterUploadDir);
+
         var app = builder.Build();
 
         // --- Database Initialization ---
@@ -46,8 +52,7 @@ public class Program
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 Console.WriteLine("🔄 Running migrations...");
-                await dbContext.Database.MigrateAsync();  //  use only Migrations 
-
+                await dbContext.Database.MigrateAsync();  
                 // Seed initial data
                 await ApplicationDbInitializer.Initialize(dbContext, userManager, roleManager);
 

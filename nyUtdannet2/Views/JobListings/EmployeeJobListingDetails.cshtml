@@ -42,26 +42,17 @@
             </div>
         </div>
         <div class="card-footer bg-light">
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-2"></i>Back to Listings
-            </a>
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Listings
+                </a>
+                <a asp-controller="JobApplications" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i>Apply for this job
+                </a>
+            </div>
         </div>
     </div>
 </div>
-
-@section Styles 
-{
-    <style>
-        .card 
-        {
-            border-radius: 10px;
-        }
-        .card-header 
-        {
-            border-radius: 10px 10px 0 0 !important;
-        }
-    </style>
-}
 
 @section Scripts 
 {

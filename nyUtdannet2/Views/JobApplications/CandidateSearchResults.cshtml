@@ -1,0 +1,137 @@
+@model IEnumerable<nyUtdannet2.Models.JobApp>
+@{
+    ViewBag.Title = "Kandidatsøkeresultater";
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Kandidatsøkeresultater</h2>
+        <div>
+            <a asp-action="SearchCandidates" class="btn btn-outline-secondary">
+                <i class="fas fa-search me-2"></i>Nytt søk
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Søkekriterier</h5>
+                    <p>
+                        <strong>Ferdigheter:</strong> @(string.IsNullOrEmpty(ViewBag.Skills) ? "Alle" : ViewBag.Skills)<br>
+                        <strong>Status:</strong> @(string.IsNullOrEmpty(ViewBag.Status) ? "Alle" : ViewBag.Status)
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>
+                        <span class="badge bg-info">@Model.Count() resultater funnet</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kandidat</th>
+                        <th>Stilling</th>
+                        <th>Sammendrag</th>
+                        <th>Status</th>
+                        <th>Dato</th>
+                        <th>CV/Søknad</th>
+                        <th>Handling</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var app in Model)
+                    {
+                        <tr>
+                            <td>@app.User.FirstName @app.User.LastName</td>
+                            <td>@app.JobListing.Title</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(app.Summary))
+                                {
+                                    @(app.Summary.Length > 100 ? app.Summary.Substring(0, 100) + "..." : app.Summary)
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    var statusClass = app.Status switch
+                                    {
+                                        ApplicationStatus.Submitted => "primary",
+                                        ApplicationStatus.UnderReview => "info",
+                                        ApplicationStatus.Interviewing => "warning",
+                                        ApplicationStatus.Offered => "success",
+                                        ApplicationStatus.Accepted => "success",
+                                        ApplicationStatus.Rejected => "danger",
+                                        ApplicationStatus.Withdrawn => "secondary",
+                                        _ => "secondary"
+                                    };
+                                }
+                                <span class="badge bg-@statusClass">@app.Status</span>
+                            </td>
+                            <td>@app.SubmittedDate.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(app.ResumePath))
+                                {
+                                    <a href="@Url.Action("DownloadFile", "JobApplications", new { applicationId = app.Id, fileType = "resume" })" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-file-pdf me-1"></i> CV
+                                    </a>
+                                }
+                                @if (!string.IsNullOrEmpty(app.CoverLetterPath))
+                                {
+                                    <a href="@Url.Action("DownloadFile", "JobApplications", new { applicationId = app.Id, fileType = "coverletter" })" class="btn btn-sm btn-outline-info ms-1">
+                                        <i class="fas fa-file-alt me-1"></i> Søknad
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", "JobApplications", new { id = app.Id })" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-user me-1"></i> Detaljer
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i> Ingen kandidater funnet som matcher dine søkekriterier.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Highlight search terms in results
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchSkills = '@ViewBag.Skills';
+            if (searchSkills && searchSkills.length > 1) {
+                const skillTerms = searchSkills.toLowerCase().split(/[,; ]+/);
+                const summaryElements = document.querySelectorAll('tbody td:nth-child(3)');
+                
+                summaryElements.forEach(function(el) {
+                    let content = el.innerHTML;
+                    
+                    skillTerms.forEach(function(term) {
+                        if (term.length > 2) { // Avoid highlighting very short terms
+                            const regex = new RegExp(term, 'gi');
+                            content = content.replace(regex, match => `<mark>${match}</mark>`);
+                        }
+                    });
+                    
+                    el.innerHTML = content;
+                });
+            }
+        });
+    </script>
+}

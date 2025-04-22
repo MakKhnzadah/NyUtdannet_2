@@ -1,5 +1,3 @@
-// JobListingsController.cs
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +37,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("EmployerJobListings", listings); // Updated view name
+                return View("EmployerJobListings", listings);
             }
             else
             {
@@ -49,7 +47,7 @@ namespace nyUtdannet2.Controllers
                     .OrderByDescending(j => j.CreatedDate)
                     .ToListAsync();
 
-                return View("EmployeeJobListings", activeListings); // Updated view name
+                return View("EmployeeJobListings", activeListings);
             }
         }
 
@@ -252,7 +250,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> ToggleFavorite(int jobListingId)
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-
+            
             var existingFavorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.JobListingId == jobListingId && f.UserId == userId);
 
@@ -279,7 +277,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> Favorites()
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-
+            
             var favorites = await _context.Favorites
                 .Where(f => f.UserId == userId)
                 .Include(f => f.JobListing)
@@ -295,7 +293,7 @@ namespace nyUtdannet2.Controllers
         public async Task<IActionResult> RemoveFavorite(int id)
         {
             var userId = _userManager.GetUserId(User) ?? throw new InvalidOperationException("User not found");
-
+            
             var favorite = await _context.Favorites
                 .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
 
@@ -307,6 +305,67 @@ namespace nyUtdannet2.Controllers
             }
 
             return RedirectToAction(nameof(Favorites));
+        }
+
+        public async Task<IActionResult> Search(string query, string location, string employmentType)
+        {
+            var jobsQuery = _context.JobListings
+                .Include(j => j.EmployerUser)
+                .Where(j => j.IsActive && j.Deadline > DateTime.UtcNow);
+            
+            // Apply search filters
+            if (!string.IsNullOrEmpty(query))
+            {
+                jobsQuery = jobsQuery.Where(j => j.Title.Contains(query) || 
+                                               j.Headline.Contains(query) || 
+                                               j.Description.Contains(query) ||
+                                               j.Requirements.Contains(query) ||
+                                               j.EmployerUser.CompanyName.Contains(query));
+            }
+            
+            if (!string.IsNullOrEmpty(location))
+            {
+                jobsQuery = jobsQuery.Where(j => j.City != null && j.City.Contains(location) || 
+                                               j.Country.Contains(location));
+            }
+            
+            if (!string.IsNullOrEmpty(employmentType))
+            {
+                jobsQuery = jobsQuery.Where(j => j.EmploymentType == employmentType);
+            }
+            
+            var results = await jobsQuery.OrderByDescending(j => j.CreatedDate).ToListAsync();
+            
+            ViewBag.SearchQuery = query;
+            ViewBag.Location = location;
+            ViewBag.EmploymentType = employmentType;
+            
+            return View("SearchResults", results);
+        }
+
+        [Authorize(Roles = "Employer")]
+        [Route("api/employerjobs")]
+        public async Task<IActionResult> GetEmployerJobs()
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
+            var jobs = await _context.JobListings
+                .Where(j => j.EmployerUserId == userId && j.IsActive)
+                .OrderByDescending(j => j.CreatedDate)
+                .Select(j => new 
+                {
+                    j.Id,
+                    j.Title,
+                    j.Deadline,
+                    j.LocationType,
+                    j.City,
+                    j.Country,
+                    ApplicationCount = _context.JobApps.Count(a => a.JobListingId == j.Id)
+                })
+                .ToListAsync();
+            
+            return Json(jobs);
         }
     }
 

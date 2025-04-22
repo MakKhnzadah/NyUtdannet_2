@@ -1,0 +1,98 @@
+@model IEnumerable<nyUtdannet2.Models.JobListing>
+
+@{
+    ViewBag.Title = "Søkeresultater";
+    Layout = "_Layout";
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/css/joblisting-mini.css" asp-append-version="true" />
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Søkeresultater</h2>
+        <div>
+            <a href="@Url.Action("Index", "JobListings")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Tilbake til alle stillinger
+            </a>
+        </div>
+    </div>
+
+    <!-- Search form -->
+    <div class="card mb-4 p-3">
+        <form asp-action="Search" method="get" class="row g-3">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="query" class="form-label">Søkeord</label>
+                    <input type="text" name="query" id="query" class="form-control" value="@ViewBag.SearchQuery" placeholder="Jobtittel, ferdigheter, firma...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="location" class="form-label">Sted</label>
+                    <input type="text" name="location" id="location" class="form-control" value="@ViewBag.Location" placeholder="By eller land">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="employmentType" class="form-label">Ansettelsestype</label>
+                   <select name="employmentType" id="employmentType" class="form-select">
+                       <option value="">Alle typer</option>
+                       <option value="Full-time" selected="@(ViewBag.EmploymentType == "Full-time")">Heltid</option>
+                       <option value="Part-time" selected="@(ViewBag.EmploymentType == "Part-time")">Deltid</option>
+                       <option value="Contract" selected="@(ViewBag.EmploymentType == "Contract")">Kontrakt</option>
+                       <option value="Internship" selected="@(ViewBag.EmploymentType == "Internship")">Internship</option>
+                   </select>
+
+                </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search me-2"></i>Søk
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="alert alert-info">
+            Fant @Model.Count() stillinger som matcher søkekriteriene.
+        </div>
+        
+        <div class="job-listings-grid">
+            @foreach (var job in Model)
+            {
+                <partial name="_JobListingMini" model="job" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-circle me-2"></i>Ingen stillinger funnet som matcher søkekriteriene. Prøv å justere søket ditt.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Highlight search terms in results
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchQuery = '@ViewBag.SearchQuery';
+            if (searchQuery && searchQuery.length > 2) {
+                const elements = document.querySelectorAll('.job-card .card-body p');
+                
+                elements.forEach(function(el) {
+                    if (!el.innerHTML.includes('<mark>')) { // Prevent double-marking
+                        el.innerHTML = el.innerHTML.replace(
+                            new RegExp(searchQuery, 'gi'),
+                            match => `<mark style="background-color:#fff3cd;padding:0;">${match}</mark>`
+                        );
+                    }
+                });
+            }
+        });
+    </script>
+}

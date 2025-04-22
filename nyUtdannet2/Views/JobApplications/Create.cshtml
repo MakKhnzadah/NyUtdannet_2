@@ -1,37 +1,8 @@
-@model nyUtdannet2.Models.JobListing
+@model JobApp
 
-<h2>Ny stilling</h2>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
 
-<form asp-action="Create" method="post" class="mt-3">
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Headline" class="form-label"></label>
-        <input asp-for="Headline" class="form-control" />
-        <span asp-validation-for="Headline" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Requirements" class="form-label"></label>
-        <textarea asp-for="Requirements" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Requirements" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Deadline" class="form-label"></label>
-        <input asp-for="Deadline" type="date" class="form-control" />
-        <span asp-validation-for="Deadline" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Lagre</button>
-</form>
+<h2>title</h2>

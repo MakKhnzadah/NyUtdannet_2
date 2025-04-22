@@ -1,0 +1,22 @@
+@model nyUtdannet2.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Min profil";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4">Min profil</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Brukernavn</dt>
+        <dd class="col-sm-9">@Model.UserName</dd>
+
+        <dt class="col-sm-3">E‑post</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Fornavn</dt>
+        <dd class="col-sm-9">@Model.FirstName</dd>
+
+        <dt class="col-sm-3">Etternavn</dt>
+        <dd class="col-sm-9">@Model.LastName</dd>
+    </dl>
+</div>

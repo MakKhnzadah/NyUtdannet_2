@@ -1,0 +1,81 @@
+@model nyUtdannet2.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Slett bruker";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Slett bruker</h1>
+            <p class="text-muted">Er du sikker på at du vil slette denne brukeren?</p>
+        </div>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Lukk"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Advarsel</h5>
+        </div>
+        <div class="card-body">
+            <p>
+                Sletting av bruker er permanent og kan ikke angres. All informasjon knyttet til denne brukeren 
+                vil bli fjernet fra systemet.
+            </p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Brukerdetaljer</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Navn:</div>
+                <div class="col-md-9">@Model.FirstName @Model.LastName</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">E-post:</div>
+                <div class="col-md-9">@Model.Email</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Brukerrolle(r):</div>
+                <div class="col-md-9">
+                    @if (ViewBag.Roles != null && ViewBag.Roles.Count > 0)
+                    {
+                        string roles = string.Join(", ", ViewBag.Roles);
+                        @roles
+                    }
+                    else
+                    {
+                        <span class="text-muted">Ingen roller</span>
+                    }
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Opprettet:</div>
+                <div class="col-md-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post" class="mt-4">
+        <input type="hidden" asp-for="Id" />
+        <div class="d-flex">
+            <a asp-action="Index" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Tilbake til liste
+            </a>
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>Bekreft sletting
+            </button>
+        </div>
+    </form>
+</div>

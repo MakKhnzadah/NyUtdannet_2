@@ -2,7 +2,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <!DOCTYPE html>
-<html lang="no">
+<html lang="no" dir="ltr">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,17 +17,20 @@
     <!-- Site-specific styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/Project.styles.css" asp-append-version="true"/>
-    
+    <link rel="stylesheet" href="~/css/joblisting-mini.css" asp-append-version="true" />
 
 
-    @RenderSection("Styles", required: false)
+    @RenderSection("Head", required: false)
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 <header>
     <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom shadow-sm mb-3">
         <div class="container-fluid">
-            <a id="logo" class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">Ny utdannet</a>
+            <a id="logo" class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="~/images/image.ny.png" alt="NY UTDANNET logo" style="height: 75px;" />
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -43,7 +46,9 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="JobApplications" asp-action="Index">Jobbsøknader</a>
                     </li>
-                   
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="JobListings" asp-action="Index">Favoritter</a>
+                    </li>
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>
