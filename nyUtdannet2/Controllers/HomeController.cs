@@ -47,21 +47,75 @@ namespace nyUtdannet2.Controllers
             return View("Index"); 
         }
         
-        
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            // Den henter pålogget bruker
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-
-            // Returner ApplicationUser-modellen til viewet
             return View(user);
         }
-
+        // End av vise bruker profil
+        
+        // Start av redigere bruker profil
+         [Authorize]
+         public async Task<IActionResult> EditProfile()
+         {
+             var user = await _userManager.GetUserAsync(User);
+             if (user == null) return RedirectToAction("Index", "Home");
+ 
+             var vm = new EditProfileViewModel
+             {
+                 Id           = user.Id,
+                 FirstName    = user.FirstName,
+                 LastName     = user.LastName,
+                 DateOfBirth  = user.DateOfBirth,
+                 StreetName   = user.StreetName,
+                 StreetNumber = user.StreetNumber,
+                 PostalCode   = user.PostalCode,
+                 City         = user.City,
+                 Country      = user.Country
+             };
+             return View(vm);
+         }
+ 
+         [HttpPost]
+         [Authorize]
+         [ValidateAntiForgeryToken]
+         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+         {
+             if (!ModelState.IsValid)
+                 return View(model);
+ 
+             var user = await _userManager.FindByIdAsync(model.Id);
+             if (user == null)
+                 return RedirectToAction("Index", "Home");
+ 
+             user.FirstName    = model.FirstName;
+             user.LastName     = model.LastName;
+             user.DateOfBirth  = model.DateOfBirth;
+             user.StreetName   = model.StreetName;
+             user.StreetNumber = model.StreetNumber;
+             user.PostalCode   = model.PostalCode;
+             user.City         = model.City;
+             user.Country      = model.Country;
+             user.UpdatedDate  = DateTime.UtcNow;
+ 
+             var result = await _userManager.UpdateAsync(user);
+             if (result.Succeeded)
+             {
+                 TempData["Message"] = "Profilen din er oppdatert!";
+                 return RedirectToAction(nameof(Profile));
+             }
+             foreach (var err in result.Errors)
+                 ModelState.AddModelError("", err.Description);
+ 
+             return View(model);
+         }
+         
+         // End av redigere profil
 
 
 

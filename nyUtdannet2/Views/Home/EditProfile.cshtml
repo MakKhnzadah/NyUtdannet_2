@@ -1,0 +1,74 @@
+@model nyUtdannet2.Models.EditProfileViewModel
+ @{
+     ViewData["Title"] = "Rediger profil";
+     <link rel="stylesheet" href="~/css/editprofile.css" asp-append-version="true" />
+ }
+ 
+ 
+ <div class="edit-profile-container">
+     <h2>Rediger profil</h2>
+ 
+     <form asp-action="EditProfile" method="post">
+         @Html.AntiForgeryToken()
+         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+         <input asp-for="Id" type="hidden" />
+ 
+         <div class="mb-3">
+             <label asp-for="FirstName">Fornavn</label>
+             <input asp-for="FirstName" class="form-control" />
+             <span asp-validation-for="FirstName" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="LastName">Etternavn</label>
+             <input asp-for="LastName" class="form-control" />
+             <span asp-validation-for="LastName" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="DateOfBirth">Fødselsdato</label>
+             <input asp-for="DateOfBirth" type="date" class="form-control" />
+             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="StreetName">Gate</label>
+             <input asp-for="StreetName" class="form-control" />
+             <span asp-validation-for="StreetName" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="StreetNumber">Husnummer</label>
+             <input asp-for="StreetNumber" class="form-control" />
+             <span asp-validation-for="StreetNumber" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="PostalCode">Postnummer</label>
+             <input asp-for="PostalCode" class="form-control" />
+             <span asp-validation-for="PostalCode" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="City">By</label>
+             <input asp-for="City" class="form-control" />
+             <span asp-validation-for="City" class="text-danger"></span>
+         </div>
+ 
+         <div class="mb-3">
+             <label asp-for="Country">Land</label>
+             <input asp-for="Country" class="form-control" />
+             <span asp-validation-for="Country" class="text-danger"></span>
+         </div>
+ 
+         <div class="form-actions">
+             <button type="submit" class="btn btn-success">Lagre endringer</button>
+             <a asp-action="Profile" class="btn btn-secondary">Avbryt</a>
+         </div>
+     </form>
+ </div>
+ 
+ 
+ @section Scripts {
+     <partial name="_ValidationScriptsPartial" />
+ }
