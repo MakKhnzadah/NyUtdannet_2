@@ -17,10 +17,13 @@
                 <a asp-controller="JobListings" asp-action="Index" class="btn btn-outline-primary">Se alle stillinger</a>
             </div>
         </div>
-        <div class="hero-image">
-            <img src="~/images/job-seekers.jpg" alt="Jobbkandidater venter på intervju" class="img-fluid" />
-        </div>
     </div>
+
+    <!-- Image section -->
+    <div class="job-image-container text-center my-4">
+        <img src="~/images/jobb.jpg" alt="Jobbsøking illustrasjon" class="img-fluid rounded shadow" style="max-width: 100%; height: auto;" />
+    </div>
+
 
     <!-- Search section -->
     <div class="search-section">
@@ -96,23 +99,6 @@
     <div class="about-section">
         <h2>Om Ny utdannet</h2>
         <p>Ny utdannet kobler nyutdannede jobbsøkere med arbeidsgivere som søker frisk kompetanse. Vår plattform er spesielt designet for å støtte overgangen fra utdanning til arbeidslivet.</p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <i class="bi bi-search"></i>
-                <h3>Finn relevante jobber</h3>
-                <p>Søk etter stillinger som passer dine kvalifikasjoner og interesser</p>
-            </div>
-            <div class="feature-card">
-                <i class="bi bi-file-earmark-text"></i>
-                <h3>Enkel søknadsprosess</h3>
-                <p>Last opp CV og søknad med få klikk</p>
-            </div>
-            <div class="feature-card">
-                <i class="bi bi-briefcase"></i>
-                <h3>For arbeidsgivere</h3>
-                <p>Finn talentfulle nyutdannede til din bedrift</p>
-            </div>
-        </div>
     </div>
 
     <!-- Registration banner at the bottom -->
@@ -157,4 +143,3 @@
         });
     </script>
 }
-
