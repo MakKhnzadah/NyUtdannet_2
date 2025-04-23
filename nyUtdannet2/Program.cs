@@ -11,14 +11,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // --- Configuration: Connection String ---
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
 
-        // --- Identity Configuration ---
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -28,12 +26,10 @@ public class Program
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        // --- MVC & Razor ---
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        // Ensure upload directories exist
         var resumeUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "resumes");
         var coverLetterUploadDir = Path.Combine(builder.Environment.WebRootPath, "uploads", "coverletters");
         Directory.CreateDirectory(resumeUploadDir);
@@ -41,7 +37,6 @@ public class Program
 
         var app = builder.Build();
 
-        // --- Database Initialization ---
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
@@ -53,7 +48,6 @@ public class Program
 
                 Console.WriteLine("🔄 Running migrations...");
                 await dbContext.Database.MigrateAsync();  
-                // Seed initial data
                 await ApplicationDbInitializer.Initialize(dbContext, userManager, roleManager);
 
                 Console.WriteLine("✅ Database initialized successfully");
@@ -66,7 +60,6 @@ public class Program
             }
         }
 
-        // --- Middleware ---
         if (app.Environment.IsDevelopment())
         {
             app.UseMigrationsEndPoint();

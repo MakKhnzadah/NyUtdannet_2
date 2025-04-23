@@ -71,9 +71,8 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        // Add file size validation
         document.addEventListener('DOMContentLoaded', function() {
-            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+            const MAX_FILE_SIZE = 5 * 1024 * 1024; 
             
             document.querySelectorAll('input[type="file"]').forEach(function(input) {
                 input.addEventListener('change', function() {

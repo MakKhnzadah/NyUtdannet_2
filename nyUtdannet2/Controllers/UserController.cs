@@ -84,7 +84,7 @@ namespace nyUtdannet2.Controllers
 
             try
             {
-                // Sjekk om brukeren har jobbannonser
+   
                 var hasJobListings = await _context.JobListings
                     .AnyAsync(j => j.EmployerUserId == id);
 
@@ -93,8 +93,7 @@ namespace nyUtdannet2.Controllers
                     TempData["Error"] = "Kan ikke slette brukeren fordi de har publiserte jobbannonser.";
                     return RedirectToAction(nameof(Delete), new { id });
                 }
-
-                // Sjekk om brukeren har jobbsøknader
+                
                 var hasApplications = await _context.JobApps
                     .AnyAsync(a => a.UserId == id);
 

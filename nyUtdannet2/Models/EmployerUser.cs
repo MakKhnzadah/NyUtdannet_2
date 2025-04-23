@@ -6,7 +6,6 @@ namespace nyUtdannet2.Models
 {
     public class EmployerUser : ApplicationUser
     {
-        // Employer-specific properties
         [Required]
         [MaxLength(200)]
         [Display(Name = "Company Name")]
@@ -25,8 +24,7 @@ namespace nyUtdannet2.Models
         [Display(Name = "Company Logo URL")]
         [Url(ErrorMessage = "Please enter a valid URL")]
         public string? CompanyLogoUrl { get; set; }
-
-        // Collection of Job Listings
+        
         public ICollection<JobListing> JobListings { get; set; } = new List<JobListing>();
     }
 }
