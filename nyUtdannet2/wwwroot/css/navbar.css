@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.navbar-nav .username {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #333333;
+    padding-right: 0.75rem;
+    text-decoration: none;
+}
+
+.navbar-nav .username:hover {
+    color: #147A8C;
+}
+
+.navbar-nav .logout {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #147A8C;
+    text-decoration: none;
+    padding-left: 0.75rem;
+    border: none;
+}
+
+.navbar-nav .logout:hover {
+    color: #0f5f6d;
+    text-decoration: underline;
+    background: none;
+}

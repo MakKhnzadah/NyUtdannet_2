@@ -12,9 +12,12 @@
                    asp-controller="Home" asp-action="Profile">Hei, @UserManager.GetUserName(User)!
                 </a>
             </li>
-            <li class="nav-item">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logg ut</button>
-            </li>
+            <form asp-area="Identity" asp-page="/Account/Logout" ... class="d-inline">
+                <button type="submit" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logg ut
+                </button>
+            </form>
         </ul>
     </form>
 }
