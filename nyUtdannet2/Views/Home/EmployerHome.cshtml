@@ -11,8 +11,7 @@
 }
 
 <div class="container employer-dashboard">
-
-    <!-- Hero Seksjon -->
+    
     <div class="employer-hero">
         <h1>Velkommen tilbake, @User.FindFirst("CompanyName")?.Value</h1>
         <p>Administrer dine stillingsannonser, søknader og finn de beste kandidatene for din bedrift.</p>
@@ -29,7 +28,7 @@
         </div>
     </div>
 
-    <!-- Hurtiglenker -->
+
     <div class="quick-links-grid">
         <a asp-controller="JobListings" asp-action="Create" class="quick-link-card">
             <i class="fas fa-plus-circle"></i>
@@ -49,7 +48,6 @@
         </a>
     </div>
 
-    <!-- Statistikk -->
     <div class="section-header">
         <h2>Oversikt</h2>
     </div>
@@ -57,6 +55,5 @@
 
 @section Scripts {
     <script>
-        // JavaScript for interaktive funksjoner kan legges her
     </script>
 }

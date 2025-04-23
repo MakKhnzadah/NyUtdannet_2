@@ -10,7 +10,6 @@ using System.Security.Claims;
 
 namespace nyUtdannet2.Controllers
 {
-    // Remove blanket [Authorize] to allow anonymous access to specific actions
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -136,7 +135,6 @@ namespace nyUtdannet2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAccount()
         {
-            // Get the current logged-in user
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -145,7 +143,6 @@ namespace nyUtdannet2.Controllers
             
             try
             {
-                // Check if user has job listings (for employers)
                 if (await _userManager.IsInRoleAsync(user, "Employer"))
                 {
                     var hasJobListings = await _context.JobListings
@@ -165,7 +162,6 @@ namespace nyUtdannet2.Controllers
                 
                 _context.Favorites.RemoveRange(favorites);
                 
-                // Remove job applications (for employees)
                 var applications = await _context.JobApps
                     .Where(a => a.UserId == user.Id)
                     .ToListAsync();
@@ -180,18 +176,13 @@ namespace nyUtdannet2.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User account deleted successfully");
-                    
-                    // Sign out the user
                     await _signInManager.SignOutAsync();
                     
-                    // Add success message
                     TempData["SuccessMessage"] = "Din konto har blitt slettet.";
                     
-                    // Redirect to home page
                     return RedirectToAction("Index");
                 }
                 
-                // If deletion fails, add errors and return to profile
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

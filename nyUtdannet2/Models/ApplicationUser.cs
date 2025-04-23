@@ -1,4 +1,3 @@
-// Models/ApplicationUser.cs
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -32,7 +31,7 @@ namespace nyUtdannet2.Models
         public DateTime LastOnline { get; set; } = DateTime.UtcNow;
 
         [Required, DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; } = DateTime.Now.AddYears(-18); // Standard: 18 år gammel
+        public DateTime DateOfBirth { get; set; } = DateTime.Now.AddYears(-18); 
         public virtual ICollection<JobApp> JobApplications { get; set; } = new List<JobApp>();
 
     }

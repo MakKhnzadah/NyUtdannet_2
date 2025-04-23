@@ -1,5 +1,4 @@
-﻿// ApplicationDbContext.cs
-namespace nyUtdannet2.Data
+﻿namespace nyUtdannet2.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ namespace nyUtdannet2.Data
         {
         }
 
-        // Job listings, applications, and favorites
+
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<JobListing> JobListings { get; set; }
         public DbSet<JobApp> JobApps { get; set; }  
@@ -23,8 +22,7 @@ namespace nyUtdannet2.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            // Configure relationships
+            
             builder.Entity<JobListing>()
                 .HasOne(j => j.EmployerUser)
                 .WithMany()
@@ -43,7 +41,6 @@ namespace nyUtdannet2.Data
                 .HasForeignKey(app => app.JobListingId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Unique constraint for Favorites (1 user can't favorite the same job twice)
             builder.Entity<Favorite>()
                 .HasIndex(f => new { f.UserId, f.JobListingId })
                 .IsUnique();

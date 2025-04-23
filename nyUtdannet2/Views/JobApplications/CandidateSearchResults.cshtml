@@ -112,7 +112,6 @@
 
 @section Scripts {
     <script>
-        // Highlight search terms in results
         document.addEventListener('DOMContentLoaded', function() {
             const searchSkills = '@ViewBag.Skills';
             if (searchSkills && searchSkills.length > 1) {
@@ -123,7 +122,7 @@
                     let content = el.innerHTML;
                     
                     skillTerms.forEach(function(term) {
-                        if (term.length > 2) { // Avoid highlighting very short terms
+                        if (term.length > 2) { 
                             const regex = new RegExp(term, 'gi');
                             content = content.replace(regex, match => `<mark>${match}</mark>`);
                         }

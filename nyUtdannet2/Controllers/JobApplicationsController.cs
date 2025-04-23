@@ -92,9 +92,9 @@ namespace nyUtdannet2.Controllers
             var jobApp = new JobApp
             {
                 Title = $"Application for {jobListing.Title}",
-                Summary = string.Empty, // Initialiser med tom streng
-                Content = string.Empty, // Initialiser med tom streng
-                JobListingId = id, // Bruk parameteren 'id' direkte
+                Summary = string.Empty,
+                Content = string.Empty,
+                JobListingId = id,
                 UserId = userId,
                 Status = ApplicationStatus.Submitted
             };
@@ -156,7 +156,7 @@ namespace nyUtdannet2.Controllers
                 if (resumeFile != null && resumeFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "resumes");
-                    Directory.CreateDirectory(uploadsFolder); // Make sure directory exists
+                    Directory.CreateDirectory(uploadsFolder); 
                     
                     var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(resumeFile.FileName)}";
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -173,7 +173,7 @@ namespace nyUtdannet2.Controllers
                 if (coverLetterFile != null && coverLetterFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "coverletters");
-                    Directory.CreateDirectory(uploadsFolder); // Make sure directory exists
+                    Directory.CreateDirectory(uploadsFolder);
                     
                     var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(coverLetterFile.FileName)}";
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -202,8 +202,7 @@ namespace nyUtdannet2.Controllers
 
         public async Task<IActionResult> DownloadFile(int applicationId, string fileType)
         {
-            // Check permissions - employers can download files for applications to their jobs
-            // and employees can download their own files
+ 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
             
@@ -368,11 +367,11 @@ namespace nyUtdannet2.Controllers
         [HttpGet("JobApplications/SearchCandidatesResults")]
         public async Task<IActionResult> SearchCandidatesResults(string skills, string status)
         {
-            // Existing search implementation moved to a separate route
+
             var userId = _userManager.GetUserId(User);
             if (userId == null) return Unauthorized();
             
-            // Base query - get applications for employer's job listings
+
             var query = _context.JobApps
                 .Include(a => a.User)
                 .Include(a => a.JobListing)
@@ -384,14 +383,13 @@ namespace nyUtdannet2.Controllers
                 query = query.Where(a => a.Status == statusEnum);
             }
             
-            // Get the applications
+
             var applications = await query.OrderByDescending(a => a.SubmittedDate).ToListAsync();
             
-            // If skills are specified, filter the already retrieved applications
-            // This is done in memory because we need to search through the content and summary fields
+
             if (!string.IsNullOrEmpty(skills))
             {
-                // Split skills into individual terms for more precise matching
+
                 var skillTerms = skills.ToLower().Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 
                 applications = applications

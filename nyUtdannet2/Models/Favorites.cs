@@ -8,13 +8,13 @@ namespace nyUtdannet2.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }  // Reference to the user
+        public string UserId { get; set; } 
 
-        public virtual ApplicationUser User { get; set; }  // Navigation property to ApplicationUser
+        public virtual ApplicationUser User { get; set; } 
 
         [Required]
-        public int JobListingId { get; set; }  // Reference to the JobListing
+        public int JobListingId { get; set; }  
 
-        public virtual JobListing JobListing { get; set; }  // Navigation property to JobListing
+        public virtual JobListing JobListing { get; set; } 
     }
 }

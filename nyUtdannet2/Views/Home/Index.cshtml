@@ -7,7 +7,7 @@
 }
 
 <div class="home-container">
-    <!-- Hero section with image -->
+
     <div class="hero-section">
         <div class="hero-content">
             <h1>Finn din første jobb etter utdanning</h1>
@@ -19,13 +19,13 @@
         </div>
     </div>
 
-    <!-- Image section -->
+
     <div class="job-image-container text-center my-4">
         <img src="~/images/jobb.jpg" alt="Jobbsøking illustrasjon" class="img-fluid rounded shadow" style="max-width: 100%; height: auto;" />
     </div>
 
 
-    <!-- Search section -->
+
     <div class="search-section">
         <h2>Søk etter jobber</h2>
         <form class="search-box" asp-controller="JobListings" asp-action="Search" method="get">
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <!-- Featured jobs section -->
+
     <div class="featured-jobs">
         <h2>Utvalgte stillinger</h2>
         <div class="jobs-grid">
@@ -95,13 +95,11 @@
         }
     </div>
 
-    <!-- About section -->
     <div class="about-section">
         <h2>Om Ny utdannet</h2>
         <p>Ny utdannet kobler nyutdannede jobbsøkere med arbeidsgivere som søker frisk kompetanse. Vår plattform er spesielt designet for å støtte overgangen fra utdanning til arbeidslivet.</p>
     </div>
 
-    <!-- Registration banner at the bottom -->
     @if (!SignInManager.IsSignedIn(User))
     {
         <div class="register-banner">
@@ -128,7 +126,6 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Add smooth scrolling to "Se alle stillinger" button
             $('a[href="#featured-jobs"]').on('click', function(event) {
                 if (this.hash !== "") {
                     event.preventDefault();

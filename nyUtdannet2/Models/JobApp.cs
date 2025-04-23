@@ -16,8 +16,7 @@ namespace nyUtdannet2.Models
         public ApplicationStatus Status { get; set; } = ApplicationStatus.Submitted;
         public string? ResumePath { get; set; }
         public string? CoverLetterPath { get; set; }
-    
-        // Navigation properties
+        
         public required string UserId { get; set; }
         public virtual ApplicationUser User { get; set; } = null!;
         public required int JobListingId { get; set; }
@@ -27,13 +26,13 @@ namespace nyUtdannet2.Models
 
     public enum ApplicationStatus
     {
-        Submitted,      // Application submitted by candidate
-        UnderReview,    // Employer is reviewing
-        Interviewing,   // In interview process
-        Offered,        // Job offer extended
-        Accepted,       // Offer accepted
-        Rejected,       // Application rejected
-        Withdrawn       // Candidate withdrew
+        Submitted,     
+        UnderReview, 
+        Interviewing, 
+        Offered,   
+        Accepted, 
+        Rejected,       
+        Withdrawn  
         ,
         Pending
     }
